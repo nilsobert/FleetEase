@@ -27,12 +27,12 @@ def get_amount_of_customers_waiting():
 def get_routePlans():
     return []
 
-def get_fleet_data():
+def getFleetData():
     carId = 1
     status = 1
     customerId = 1
     coordinate = Coordinate(1, 2)
-    return {"CarId:" : carId, "Status:" : status, "CustomerId:" : customerId, "Coordinate:" : coordinate}
+    return {"CarId:" : carId, "Status:" : status, "CustomerId:" : customerId, "Coordinate:" : coordinate.as_tuple()}
 
 def getFleetStatistics():
     """
@@ -62,4 +62,4 @@ def getFleetStatistics():
             "Idle ratio": round(idle_ratio,rounding_decimals), "Amount of customers waiting": get_amount_of_customers_waiting()}
 
 if __name__ == "__main__":
-    print(getFleetStatistics())
+    print(getFleetData())

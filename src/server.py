@@ -2,7 +2,7 @@ import json
 import time
 from flask import Flask, jsonify, request
 from applicationStatistics import getApplicationStatistics
-from fleetStatistics import getFleetStatistics
+from fleetStatistics import getFleetStatistics, getFleetData
 from .api.models.scenario import Scenario
 from .api.models.usage import Usage
 
@@ -33,13 +33,9 @@ def create_app():
     def get_application_statistics():
         return jsonify(getApplicationStatistics(5))
 
-    @app.route('/updateParameters', methods=['PUT'])
-    def update_parameters():
-        return jsonify({'message': 'parameters updated'})
-
     @app.route('/fleetData', methods=['GET'])
     def get_fleet_data():
-        return jsonify(get_fleet_data())
+        return jsonify(getFleetData())
 
     @app.route('/test_streaming')
     def test_streaming():
