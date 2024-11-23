@@ -6,6 +6,7 @@ from api.models import *
 import asyncio
 import time
 from api.api import API
+from plotter import Plotter
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
@@ -30,6 +31,7 @@ def haversine_vector(coords1: np.ndarray, coords2: np.ndarray) -> np.ndarray:
     return R * c  # [km]
 
 def get_distance_matrix(v1, v2):
+    #print(v1)
     v1_array = np.array([coord.as_tuple() for coord in v1])
     v2_array = np.array([coord.as_tuple() for coord in v2])
     
@@ -51,7 +53,7 @@ def assign_customers_to_vehicles_sequential(vehicles, customers):
     unserved_customers = customers[:]
     assignment_history = []
     
-    while unserved_customers.any():
+    while unserved_customers:
         # Get the current positions of the vehicles
         vehicle_positions = [vehicle.position for vehicle in vehicles]
         customer_positions = [customer.position for customer in unserved_customers]
@@ -83,10 +85,12 @@ def assign_customers_to_vehicles_sequential(vehicles, customers):
 
 if __name__ == "__main__":
     api = API()
-    num_vehicles = 20
-    num_customers =100
-    scenario, customers, vehicles = asyncio.run(api.create_and_query_scenario(num_of_customers = num_customers, num_of_vehicles = num_vehicles))
-
-
-
+    num_vehicles = 5
+    num_customers =5
+    scenario, vehicles, customers = asyncio.run(api.create_and_query_scenario(num_of_customers = num_customers, num_of_vehicles = num_vehicles))
+    result = assign_customers_to_vehicles_sequential(vehicles=vehicles, customers=customers)
+    for a in result:
+        print(a.routePlan)
+    plotter = Plotter(vehicles=vehicles, customers=customers)
+    plotter.plot_customers()
 

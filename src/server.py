@@ -9,7 +9,7 @@ def create_app():
     app = Flask(__name__)
 
     vehicles = [1, 2, 3, 4, 5]
-    customers = []
+    customers = ["Alan", "Tod", "Jane"]
     fleet_statistics = []
     application_statistics = []
 
@@ -32,6 +32,10 @@ def create_app():
     @app.route('/updateParameters', methods=['PUT'])
     def update_parameters():
         return jsonify({'message': 'parameters updated'})
+
+    @app.route('/fleetData', methods=['GET'])
+    def get_fleet_data():
+        return jsonify(get_fleet_data())
 
     @app.route('/test_streaming')
     def test_streaming():
