@@ -46,6 +46,35 @@ def getApplicationStatistics(length:int):
     return {"Average RAM usage": round(total_ram/time, 1), "Average CPU usage": round(total_cpu/time, 1)}
 
 
+def get_cpu_usage():
+    # Get the current process
+    process = psutil.Process()
+    # Get the CPU usage as a percentage
+    cpu_usage = process.cpu_percent(interval=1)  # The interval defines the time span for sampling
+    return cpu_usage
+
+
+
+class System:
+    def __init__(self) -> None:
+        self.number_of_points = 50
+        self.cpu = []
+        self.ram = []
+        self.process = psutil.Process()
+        self.interval = 0.3
+        self.stop = False
+    
+    def measure(self):
+        while not self.stop:
+            self.cpu.append(self.process.cpu_percent(interval=0.2))
+            self.ram.append(self.process.memory_percent())
+            self.cpu = self.cpu[-min(len(self.cpu), self.number_of_points):]
+            self.ram = self.ram[-min(len(self.ram), self.number_of_points):]
+            sleep(self.interval)
+            print(self.cpu)
+            print(self.ram)
+
 if __name__ == "__main__":
-  # getStatistics(10)
-   demoLiveUsage()
+    system = System()
+    system.measure()
+            
