@@ -18,6 +18,18 @@ def get_amount_of_customers_waiting():
     return 0
 
 def getFleetStatistics():
+    """
+    Calculates and returns fleet statistics including total consumption, productive ratio, idle ratio, and amount of customers waiting.
+
+    Returns:
+        dict: A dictionary containing the fleet statistics.
+
+    Raises:
+        Exception: If the distance of finished rides is higher than the total distance travelled.
+        Exception: If the time passed is less than or equal to 0.
+        Exception: If the total distance travelled is negative.
+        Exception: If the car travelled faster than the set velocity.
+    """
     if get_total_distance_finished_rides()>get_total_distance_travelled():
         raise Exception("The distance of finished rides cannot be higher than the total distance travelled.")
     if get_time_passed()<=0:
