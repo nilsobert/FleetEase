@@ -57,6 +57,11 @@ class Assigner:
             case "basic":
                 return self.basic
     
+    def unpack_scenario(self, new_scenario):
+        self.scenario = new_scenario
+        self.free_vehicles = [v for v in self.scenario.vehicles if v.isAvailable]
+
+    
     def basic(self):
         print("Initial assignement:")
         _, self.free_vehicles, self.buys_vehicles, self.unserved_customers, self.served_customers = basic_initial_assignement(self.scenario, self.vehicles, self.customers, self.api)
