@@ -3,7 +3,7 @@ import asyncio
 
 api = API()
 
-scenario = asyncio.run(api.create_and_initialize_scenario(100,20))
+scenario = asyncio.run(api.create_and_initialize_scenario(num_of_customers=100,num_of_vehicles=20))
 print(scenario)
 
 customers = asyncio.run(api.get_customers_for_scenario(scenario))
