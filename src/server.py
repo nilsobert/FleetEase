@@ -1,7 +1,8 @@
 import json
 from flask import Flask, jsonify, request
 
-from applicationStatistics import getStatistics
+from applicationStatistics import getApplicationStatistics
+from fleetStatistics import getFleetStatistics
 
 app = Flask(__name__)
 
@@ -20,12 +21,15 @@ def get_customers():
 
 @app.route('/fleetStatistics', methods=['GET'])
 def get_fleet_statistics():
- return jsonify(fleet_statistics)
+ return jsonify(getFleetStatistics())
 
 @app.route('/applicationStatistics', methods=['GET'])
 def get_application_statistics():
- return jsonify(getStatistics(5))
+ return jsonify(getApplicationStatistics(5))
 
 @app.route('/updateParameters', methods=['PUT'])
 def update_parameters():
  return jsonify({'message': 'parameters updated'})
+
+if __name__ == '__main__':
+ app.run(port=5000)

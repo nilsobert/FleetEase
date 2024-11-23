@@ -17,7 +17,7 @@ def get_cpu_usage():
 def get_ram_usage():
     return psutil.virtual_memory().percent
 
-def getStatistics(length:int):
+def getApplicationStatistics(length:int):
     total_ram = 0
     total_cpu = 0
     time = 0
