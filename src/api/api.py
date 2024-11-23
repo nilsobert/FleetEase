@@ -1,8 +1,8 @@
 import httpx
 import asyncio
-from models.scenario import Scenario
-from models.customer import Customer
-from models.vehicle import Vehicle
+from .models.scenario import Scenario
+from .models.customer import Customer
+from .models.vehicle import Vehicle
 
 class API:
 
@@ -187,17 +187,6 @@ class _RequestHandler:
             print(f"DELETE request failed: {e}")
             return None
 
-<<<<<<< HEAD
-if __name__ == "__main__":
-    # Running the code
-    async def main():
-        api = API()
-        #await api.create_and_initialize_scenario(342)
-        await api.get_customers_for_scenario("b5eedd63-db55-4a1e-8c4e-a4d2cc489e17")
-        #await api.get_customer("af0fa386-88cf-4e4f-ad22-ffc8726585f1")
-
-    # Run the async function using asyncio
-=======
 
 # Running the code
 async def main():
@@ -208,5 +197,4 @@ async def main():
 
 if __name__ == "__main__":
 # Run the async function using asyncio
->>>>>>> 458e8229bd72fbda2ad15cfe79b4d7f5ec908adc
     asyncio.run(main())
