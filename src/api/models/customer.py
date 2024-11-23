@@ -1,6 +1,6 @@
 from uuid import UUID
 from dataclasses import dataclass
-from models.coordinate import Coordinate
+from .coordinate import Coordinate
 
 @dataclass
 class Customer:
