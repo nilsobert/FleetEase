@@ -1,7 +1,8 @@
 import httpx
 import asyncio
-from .models.scenario import Scenario
-from .models.customer import Customer
+from models.scenario import Scenario
+from models.customer import Customer
+from models.vehicle import Vehicle
 
 class API:
 
@@ -25,13 +26,15 @@ class API:
         return Scenario.from_json(await self.scenario_runner.initialize_scenario(response))
     
     async def get_all_scenarios(self):
-        pass
+        json_data = await self.basic_api.get_all_scenarios()
+        scenarios = [Scenario.from_json(scenario_data) for scenario_data in json_data]
+        return scenarios
 
     async def delete_scenario(self, scenario):
-        pass
+        await self.basic_api.delete_scenario(scenario)
 
-    async def get_scenario(self, scenario):
-        pass
+    async def get_scenario(self, scenario_id):
+        return Scenario.from_json(await self.basic_api.get_scenario(scenario_id))
 
     async def update_scenario(self, scenario):
         pass
@@ -39,11 +42,13 @@ class API:
     async def launch_scenario(self, scenario):
         pass
 
-    async def get_vehicle(self, vehicle):
-        pass
+    async def get_vehicle(self, vehicle_id):
+        return Vehicle.from_json(await self.basic_api.get_vehicle(vehicle_id))
 
     async def get_all_vehicles_for_scenario(self, scenario):
-        pass
+        json_data = await self.basic_api.get_all_vehicles_for_scenario(scenario)
+        vehicles = [Vehicle.from_json(vehicle_data) for vehicle_data in json_data]
+        return vehicles
 
 class _BasicAPI:
     base_url = 'http://159.65.113.122:8080'
@@ -182,6 +187,7 @@ class _RequestHandler:
             print(f"DELETE request failed: {e}")
             return None
 
+<<<<<<< HEAD
 if __name__ == "__main__":
     # Running the code
     async def main():
@@ -191,4 +197,16 @@ if __name__ == "__main__":
         #await api.get_customer("af0fa386-88cf-4e4f-ad22-ffc8726585f1")
 
     # Run the async function using asyncio
+=======
+
+# Running the code
+async def main():
+    api = API()
+    x = await api.create_and_initialize_scenario(23, 123)
+    await api.get_customers_for_scenario(x.id) #"b5eedd63-db55-4a1e-8c4e-a4d2cc489e17"
+    #await api.get_customer("af0fa386-88cf-4e4f-ad22-ffc8726585f1")
+
+if __name__ == "__main__":
+# Run the async function using asyncio
+>>>>>>> 458e8229bd72fbda2ad15cfe79b4d7f5ec908adc
     asyncio.run(main())
