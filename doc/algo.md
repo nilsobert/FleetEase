@@ -18,4 +18,12 @@ API:
     - API for webapp
 ````
 
+## Iterations:
+````
+Basic
+    - use linear sum assignement to get a optimal mapping between cars and customers initially
+    - serve all customers and save state
+    - loop over api to discover free cars
+````
+
 

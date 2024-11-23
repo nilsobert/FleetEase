@@ -1,9 +1,14 @@
-from models import *
+from api.models import *
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from typing import Callable
 from scipy.spatial.distance import cdist
+from api.models.vehicle import Vehicle
+from api.models.customer import Customer
+from api.models.scenario import Scenario
 import time
+from api.api import API
+from basic import basic_initial_assignement, basic_loop
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
@@ -35,49 +40,43 @@ def get_distance_matrix(v1, v2):
     return distance_matrix
 
 class Assigner:
-    def __init__(self, vehicles:list[Vehicle], customers:list[Customer], algorithm:str="basic") -> None:
+    def __init__(self, scenario: Scenario, vehicles:list[Vehicle], customers:list[Customer], api:API, algorithm:str="basic") -> None:
+        self.api = api
+        self.scenario = scenario
         self.algorithm: str = algorithm
         self.assign: Callable = self.get_function()
         self.vehicles: list[Vehicle] = vehicles
         self.customers: list[Customer] = customers
+        self.free_vehicles = []
+        self.busy_vehicles = []
+        self.unserved_customers = []
+        self.served_customers = []
     
     def get_function(self) -> Callable:
         match self.algorithm:
             case "basic":
                 return self.basic
     
+    def unpack_scenario(self, new_scenario):
+        self.scenario = new_scenario
+        self.free_vehicles = [v for v in self.scenario.vehicles if v.isAvailable]
+        self.busy_vehicles = [v for v in self.scenario.vehicles if not v.isAvailable]
+        next_customers_id = [a.customerId for a in self.busy_vehicles]
+        self.unserved_customers = [v for v in self.scenario.customers if v.awaitingService and not v.id in next_customers_id]
+        self.served_customers = [v for v in self.scenario.customers if not v.awaitingService or v.id in next_customers_id]
+
+    
     def basic(self):
-        coordsx, coordsy = [customer.coordinate for customer in self.customers], [vehicle.coordinate for vehicle in self.vehicles]
-        dist = zero_pad(get_distance_matrix(coordsx, coordsy))
-        row_ind, col_ind = linear_sum_assignment(dist)
-        mapping = np.column_stack((row_ind, col_ind))
-        costs = dist[row_ind, col_ind]
-
-        non_zero_mask = costs != 0
-        costs = costs[non_zero_mask]
-        mapping = mapping[non_zero_mask]
-
-        for cost, (customer, vehicle) in zip(costs, mapping):
-            print(cost, customer, vehicle)
+        print("Initial assignement:")
+        _, self.free_vehicles, self.buys_vehicles, self.unserved_customers, self.served_customers = basic_initial_assignement(self.scenario, self.vehicles, self.customers, self.api)
+        print(f"    {len(self.free_vehicles)} free vehicles")
+        print(f"    {len(self.buys_vehicles)} busy vehicles")
+        print(f"    {len(self.unserved_customers)} unserved customers")
+        print(f"    {len(self.served_customers)} served customers")
+        basic_loop(self)
         
 
 if __name__ == "__main__":
-    coordsx = np.zeros((200), dtype=object)
-    coordsy = np.zeros((50), dtype=object)
-    for n in range(200):
-        coordsx[n] = Coordinate(np.random.random()*100, np.random.random()*100)
-    for n in range(50):
-        coordsy[n] = Coordinate(np.random.random()*100, np.random.random()*100)
-    dist = zero_pad(get_distance_matrix(coordsx, coordsy))
-    row_ind, col_ind = linear_sum_assignment(dist)
-    mapping = np.column_stack((row_ind, col_ind))
-    costs = dist[row_ind, col_ind]
-
-    non_zero_mask = costs != 0
-    costs = costs[non_zero_mask]
-    mapping = mapping[non_zero_mask]
-
-    for cost, (customer, vehicle) in zip(costs, mapping):
-            print(cost, customer, vehicle)
+    pass
 
 
