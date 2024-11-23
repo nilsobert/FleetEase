@@ -78,6 +78,7 @@ class _BasicAPI:
             "numberOfVehicles": num_of_vehicles,
             "numberOfCustomers": num_of_customers
         }
+        print(f"URL: {url}, Params: {params}")
         return await self.request_handler.post(url, params=params)
 
     async def get_all_scenarios(self):
@@ -191,10 +192,9 @@ class _RequestHandler:
 # Running the code
 async def main():
     api = API()
-    x = await api.create_and_initialize_scenario(23, 123)
-    await api.get_customers_for_scenario(x.id) #"b5eedd63-db55-4a1e-8c4e-a4d2cc489e17"
+    x = await api.create_and_initialize_scenario(12, 23)
+    await api.get_customers_for_scenario(x) #"b5eedd63-db55-4a1e-8c4e-a4d2cc489e17"
     #await api.get_customer("af0fa386-88cf-4e4f-ad22-ffc8726585f1")
 
 if __name__ == "__main__":
-# Run the async function using asyncio
     asyncio.run(main())
