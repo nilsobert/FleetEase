@@ -1,7 +1,7 @@
 import httpx
 import asyncio
-import json
 from models.scenario import Scenario
+from models.customer import Customer
 
 class API:
 
@@ -10,18 +10,20 @@ class API:
         self.scenario_runner = _ScenarioRunnerAPI()
 
     async def get_customer(self, customer):
-        return await self.basic_api.get_customer(customer.id)
+        return Customer.from_json(await self.basic_api.get_customer(customer.id))
 
-    async def get_customer_for_scenario(self, scenario):
-        pass
+    async def get_customers_for_scenario(self, scenario):
+        json_data = await self.basic_api.get_customers_for_scenario(scenario.id)
+        customers = [Customer.from_json(customer_data) for customer_data in json_data]
+        return customers
 
     async def get_scenario_metadata(self, scenario):
         pass
 
     async def create_and_initialize_scenario(self, scenario):
         response = await self.basic_api.create_scenario(23, 34)
-        print(Scenario.from_json(json.loads(await self.scenario_runner.initialize_scenario(response))))
-
+        return Scenario.from_json(await self.scenario_runner.initialize_scenario(response))
+    
     async def get_all_scenarios(self):
         pass
 
@@ -50,12 +52,9 @@ class _BasicAPI:
         self.request_handler = _RequestHandler()
 
     async def get_customer(self, customer_id):
-        endpoint = 'customers'
+        endpoint = f'customers/{customer_id}'
         url = f"{self.base_url}/{endpoint}"
-        params = {
-            "customerId": customer_id,
-        }
-        return await self.request_handler.get(url, params=params)
+        return await self.request_handler.get(url)
 
     async def get_customers_for_scenario(self, scenario_id):
         endpoint = f"scenarios/{scenario_id}/customers"
@@ -148,7 +147,7 @@ class _RequestHandler:
             async with httpx.AsyncClient() as client:
                 response = await client.get(url, params=params, headers=self.headers)
                 response.raise_for_status()
-                return response.json()  # Return parsed JSON
+                return response.json()
         except httpx.RequestError as e:
             print(f"GET request failed: {e}")
             return None
@@ -158,7 +157,7 @@ class _RequestHandler:
             async with httpx.AsyncClient() as client:
                 response = await client.post(url, json=data, headers=self.headers, params=params)
                 response.raise_for_status()
-                return response.json()  # Return parsed JSON
+                return response.json()
         except httpx.RequestError as e:
             print(f"POST request failed: {e}")
             return None
@@ -168,7 +167,7 @@ class _RequestHandler:
             async with httpx.AsyncClient() as client:
                 response = await client.put(url, json=data, headers=self.headers)
                 response.raise_for_status()
-                return response.json()  # Return parsed JSON
+                return response.json()
         except httpx.RequestError as e:
             print(f"PUT request failed: {e}")
             return None
@@ -178,7 +177,7 @@ class _RequestHandler:
             async with httpx.AsyncClient() as client:
                 response = await client.delete(url, json=data, headers=self.headers)
                 response.raise_for_status()
-                return response.json()  # Return parsed JSON
+                return response.json()
         except httpx.RequestError as e:
             print(f"DELETE request failed: {e}")
             return None
@@ -186,7 +185,9 @@ class _RequestHandler:
 # Running the code
 async def main():
     api = API()
-    await api.create_and_initialize_scenario(342)
+    #await api.create_and_initialize_scenario(342)
+    await api.get_customers_for_scenario("b5eedd63-db55-4a1e-8c4e-a4d2cc489e17")
+    #await api.get_customer("af0fa386-88cf-4e4f-ad22-ffc8726585f1")
 
 # Run the async function using asyncio
 asyncio.run(main())
