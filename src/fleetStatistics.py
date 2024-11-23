@@ -3,7 +3,7 @@ velocity_in_km_per_hour = 40
 
 # in kilometer: number($float)
 def get_total_distance_travelled():
-    return 40
+    return 0
 
 # in minutes
 def get_time_passed():
