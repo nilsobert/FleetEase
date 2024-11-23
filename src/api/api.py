@@ -9,8 +9,8 @@ class API:
         self.basic_api = _BasicAPI()
         self.scenario_runner = _ScenarioRunnerAPI()
 
-    async def get_customer(self, customer):
-        return Customer.from_json(await self.basic_api.get_customer(customer.id))
+    async def get_customer(self, customer_id):
+        return Customer.from_json(await self.basic_api.get_customer(customer_id))
 
     async def get_customers_for_scenario(self, scenario):
         json_data = await self.basic_api.get_customers_for_scenario(scenario.id)
@@ -20,8 +20,8 @@ class API:
     async def get_scenario_metadata(self, scenario):
         pass
 
-    async def create_and_initialize_scenario(self, scenario):
-        response = await self.basic_api.create_scenario(23, 34)
+    async def create_and_initialize_scenario(self, num_of_customers, num_of_vehicles):
+        response = await self.basic_api.create_scenario(num_of_customers, num_of_vehicles)
         return Scenario.from_json(await self.scenario_runner.initialize_scenario(response))
     
     async def get_all_scenarios(self):
