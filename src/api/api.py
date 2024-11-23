@@ -1,7 +1,7 @@
 import httpx
 import asyncio
-from models.scenario import Scenario
-from models.customer import Customer
+from .models.scenario import Scenario
+from .models.customer import Customer
 
 class API:
 

@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 from uuid import UUID
-from models.vehicle import Vehicle
-from models.customer import Customer
+from .vehicle import Vehicle
+from .customer import Customer
 
 @dataclass
 class Scenario:
