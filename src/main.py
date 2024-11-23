@@ -14,7 +14,7 @@ data_lock = threading.Lock()
 # Worker thread function
 def assignement_worker(scenario, vehicles, customers, api, algorithm="basic"):
     global shared_data
-    assigner = Assigner()
+    assigner = Assigner(scenario=scenario, vehicles=vehicles, customers=customers, api=api, algorithm=algorithm)
     while True:
         with data_lock:
             if shared_data["message"]:
@@ -42,16 +42,17 @@ def init():
     print("Initializing api...")
     api = API()
     num_vehicles = 10
-    num_customers =35
+    num_customers = 35
     scenario, vehicles, customers = asyncio.run(api.create_and_query_scenario(num_of_customers = num_customers, num_of_vehicles = num_vehicles))
     asyncio.run(api.launch_scenario(speed=0.5, scenario=scenario))
     print("    finished")
+    return scenario, vehicles, customers, api
 
 
 if __name__ == "__main__":
-    init()
+    scenario, vehicles, customers, api = init()
     # Start the worker thread
-    thread = threading.Thread(target=assignement_worker, args=(shared_data, data_lock, 2) daemon=True)
+    thread = threading.Thread(target=assignement_worker, args=(scenario, vehicles, customers, api,) daemon=True)
     thread.start()
 
     # Start the Flask server

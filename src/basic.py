@@ -48,15 +48,8 @@ def basic_procedual_assignement(scenario, vehicles, customers, api):
 def basic_loop(self):
     while self.unserved_customers:
         time.sleep(1)
-        print(".")
-        updated_vehicles = asyncio.run(self.api.get_all_vehicles_for_scenario(self.scenario))
-        print(updated_vehicles)
-        free_vehicles_id = [v.id for v in list(filter(lambda x: x.isAvailable, updated_vehicles))]
-        if free_vehicles_id:
-            print("--------------------")
-            print(len(free_vehicles_id))
-            self.busy_vehicles = list(filter(lambda x: x.id not in free_vehicles_id, self.busy_vehicles))
-            self.free_vehicles = list(filter(lambda x: x.id in free_vehicles_id, self.vehicles))
+        updated_scenario = asyncio.run(self.api.get_runner_scenario(self.scenario))
+        self.unpack_scenario()
         if self.free_vehicles:
             _, _free_vehicles, _buys_vehicles, _unserved_customers, _served_customers = basic_procedual_assignement(self.scenario, self.vehicles, self.customers, self.api)
             self.free_vehicles = _free_vehicles
