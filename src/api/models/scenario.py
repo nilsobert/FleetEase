@@ -52,6 +52,6 @@ class Scenario:
                 Customer(**customer) for customer in data.get("customers", [])
             ],
             vehicles=[
-                Vehicle(**vehicle) for vehicle in data.get("vehicles", [])
+                Vehicle(routePlan=RoutePlan(trips=[], initial_Coords=Coordinate(vehicle["coordX"], vehicle["coordY"])), **vehicle) for vehicle in data.get("vehicles", [])
             ],
         )

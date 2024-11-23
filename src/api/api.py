@@ -47,13 +47,19 @@ class API:
         await self.scenario_runner.update_scenario(scenario.id, vehicle.id, customer.id)
 
     async def launch_scenario(self, speed, scenario):
-        await self.scenario_runner.launch_scenario(speed, scenario.id)
+        await self.scenario_runner.launch_scenario(scenario.id, speed)
+    
+    async def get_runner_scenario(self, scenario):
+        result = await self.scenario_runner.get_scenario(scenario.id)
+        print(result)
+        return Scenario.from_json()
 
     async def get_vehicle(self, vehicle_id):
         return Vehicle.from_json(await self.basic_api.get_vehicle(vehicle_id))
 
     async def get_all_vehicles_for_scenario(self, scenario):
         json_data = await self.basic_api.get_all_vehicles_for_scenario(scenario.id)
+        print(json_data)
         vehicles = [Vehicle.from_json(vehicle_data) for vehicle_data in json_data]
         return vehicles
 
@@ -119,7 +125,7 @@ class _ScenarioRunnerAPI:
         self.request_handler = _RequestHandler()
 
     async def get_scenario(self, scenario_id):
-        endpoint = f"Scenarios/get_scenarios/{scenario_id}"
+        endpoint = f"Scenarios/get_scenario/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
         return await self.request_handler.get(url)
 
@@ -129,16 +135,18 @@ class _ScenarioRunnerAPI:
         return await self.request_handler.post(url, data=body)
 
     async def update_scenario(self, scenario_id, vehicle_id, customer_id):
-        endpoint = f"/Scenarios/update_scenario/{scenario_id}"
+        endpoint = f"Scenarios/update_scenario/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
+        #print(url)
         payload = {
             "vehicles": [
                 {
-                    "id": vehicle_id,
-                    "customerId": customer_id
+                    "id": str(vehicle_id),
+                    "customerId": str(customer_id)
                 }
             ]
         }
+        #print(payload)
         return await self.request_handler.put(url, data=payload)
 
     async def launch_scenario(self, scenario_id, speed):
@@ -176,11 +184,24 @@ class _RequestHandler:
     async def put(self, url, data=None):
         try:
             async with httpx.AsyncClient() as client:
+                print("1")
                 response = await client.put(url, json=data, headers=self.headers)
+                print("2")
+                print(response.json())
                 response.raise_for_status()
+                # Return the JSON response if successful
                 return response.json()
+        except httpx.HTTPStatusError as e:
+            # Log the HTTP response details for debugging
+            print(f"HTTP error {e.response.status_code}: {e.response.text}")
+            return None
         except httpx.RequestError as e:
-            print(f"PUT request failed: {e}")
+            # Log connection-related errors
+            print(f"Request error: {e}")
+            return None
+        except Exception as e:
+            # Catch any other unexpected exceptions
+            print(f"Unexpected error: {e}")
             return None
         
     async def delete(self, url):
