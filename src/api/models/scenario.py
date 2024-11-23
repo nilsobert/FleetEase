@@ -6,22 +6,22 @@ from .customer import Customer
 
 @dataclass
 class Scenario:
-    id: str
+    id: UUID
     startTime: str
     endTime: str
     status: str
     customers: List[Customer]
     vehicles: List[Vehicle]
 
-    def __repr__(self):
-        return (f"Scenario(\n"
-            f"    id={self.id},\n"
-            f"    startTime={self.startTime},\n"
-            f"    endTime={self.endTime},\n"
-            f"    status={self.status},\n"
-            f"    customers={self.customers},\n"
-            f"    vehicles={self.vehicles}\n"
-            f")")
+    # def __repr__(self):
+    #     return (f"Scenario(\n"
+    #         f"    id={self.id},\n"
+    #         f"    startTime={self.startTime},\n"
+    #         f"    endTime={self.endTime},\n"
+    #         f"    status={self.status},\n"
+    #         f"    customers={self.customers},\n"
+    #         f"    vehicles={self.vehicles}\n"
+    #         f")")
 
     @staticmethod
     def from_json(data: dict) -> "Scenario":
@@ -36,5 +36,20 @@ class Scenario:
             ],
             vehicles=[
                 Vehicle(**vehicle) for vehicle in scenario_data.get("vehicles", [])
+            ],
+        )
+    
+    @staticmethod
+    def from_json_plain(data: dict) -> "Scenario":
+        return Scenario(
+            id=data["id"],
+            startTime=data["startTime"],
+            endTime=data["endTime"],
+            status=data["status"],
+            customers=[
+                Customer(**customer) for customer in data.get("customers", [])
+            ],
+            vehicles=[
+                Vehicle(**vehicle) for vehicle in data.get("vehicles", [])
             ],
         )
