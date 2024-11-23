@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from uuid import UUID
 from .coordinate import Coordinate
+from .routePlan import RoutePlan
 
 @dataclass
 class Vehicle:
@@ -14,6 +15,7 @@ class Vehicle:
     numberOfTrips: int
     remainingTravelTime: int
     vehicleSpeed: int
+    routePlan: RoutePlan
 
     @property
     def position(self):
@@ -40,4 +42,5 @@ class Vehicle:
             numberOfTrips=data["numberOfTrips"],
             remainingTravelTime=data["remainingTravelTime"],
             vehicleSpeed=data["vehicleSpeed"],
+            routePlan= RoutePlan([])
         )
