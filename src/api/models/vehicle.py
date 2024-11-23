@@ -19,21 +19,21 @@ class Vehicle:
     def position(self):
         return Coordinate(self.coordX, self.coordY)
 
-    # def __repr__(self):
-    #     return (
-    #         f"Vehicle(\n"
-    #         f"    activeTime={self.activeTime},\n"
-    #         f"    coordX={self.coordX},\n"
-    #         f"    coordY={self.coordY},\n"
-    #         f"    customerId={self.customerId},\n"
-    #         f"    distanceTravelled={self.distanceTravelled},\n"
-    #         f"    id={self.id},\n"
-    #         f"    isAvailable={self.isAvailable},\n"
-    #         f"    numberOfTrips={self.numberOfTrips},\n"
-    #         f"    remainingTravelTime={self.remainingTravelTime},\n"
-    #         f"    vehicleSpeed={self.vehicleSpeed}\n"
-    #         f")"
-    #     )
+    def __repr__(self):
+        return (
+            f"Vehicle(\n"
+            f"    activeTime={self.activeTime},\n"
+            f"    coordX={self.coordX},\n"
+            f"    coordY={self.coordY},\n"
+            f"    customerId={self.customerId},\n"
+            f"    distanceTravelled={self.distanceTravelled},\n"
+            f"    id={self.id},\n"
+            f"    isAvailable={self.isAvailable},\n"
+            f"    numberOfTrips={self.numberOfTrips},\n"
+            f"    remainingTravelTime={self.remainingTravelTime},\n"
+            f"    vehicleSpeed={self.vehicleSpeed}\n"
+            f")"
+        )
 
     @staticmethod
     def from_json(data: dict) -> "Vehicle":
