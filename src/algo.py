@@ -1,52 +1,33 @@
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Any
+from aux import *
+import numpy as np
+from scipy.optimize import linear_sum_assignment
+from typing import Callable
 
-class Coordinate:
-    def __init__(self, x, y) -> None:
-        self.x = x
-        self.y = y
+def zero_pad(matrix):
+    m = matrix.reshape((matrix.shape[0], -1))
+    padded = 0 * np.ones(2 * [max(m.shape)], dtype=m.dtype)
+    padded[0:m.shape[0], 0:m.shape[1]] = m
+    return padded
 
-class Vehicle:
-    def __init__(self, position:Coordinate, charge:int=100, state="idle", ident:str="def_veh"):
-        self.id = ident
-        self.position = position  
-        self.charge = charge  
-        self.state = state  # "transporting", "idle", or "preparing"
-
-    def __repr__(self):
-        return f"Vehicle(position={self.position}, charge={self.charge}, state='{self.state}', ident={self.ident})"
+def get_distance_matrix(v1, v2):
+    pass
 
 
-class Passenger:
-    def __init__(self, initial_position:Coordinate, destination:Coordinate, state="waiting", ident:str="def_pass"):
-        self.id = ident
-        self.initial_position = initial_position 
-        self.destination = destination 
-        self.state = state  # "waiting" or "travelling"
-
-    def __repr__(self):
-        return f"Passenger(initial_position={self.initial_position}, destination={self.destination}, state='{self.state}', ident={self.ident})"
-
-
-class Job:
-    def __init__(self, request_time:datetime, passenger:Passenger, vehicle:Vehicle, state:str="preparing", pickup_time:datetime|None=None, completion_time:datetime|None=None) -> None:
-        self.request_time: datetime = request_time
-        self.state: str = state # preparing | transporting | complete
-        self.pickup_time: datetime | None = pickup_time
-        self.passenger: Passenger = passenger
-        self.vehicle: Vehicle = vehicle
-        self.completion_time: datetime = completion_time
+class Assigner:
+    def __init__(self, vehicles:list[Vehicle], passengers:list[Passenger], algorithm:str="basic") -> None:
+        self.algorithm:str = algorithm
+        self.assign: Callable = self.get_function()
+        self.vehicles: list[Vehicle] = vehicles
+        self.passengers: list[Passenger] = passengers
     
-    def complete(self, time:datetime=datetime.now()):
-        self.state = "complete"
-        self.completion_time = time
+    def get_function(self) -> Callable:
+        match self.algorithm:
+            case "basic":
+                return self.basic
     
-    
+    def basic():
+        pass
 
-
-@dataclass
-class ApplicationState:
-    cars: list[Vehicle]
-    persons: list[Passenger]
-    jobs: list[Job]
+if __name__ == "__main__":
+    r2=np.random.rand(3,5)
+    print(zero_pad(r2))
