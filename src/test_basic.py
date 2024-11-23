@@ -4,6 +4,7 @@ from typing import Callable
 from scipy.spatial.distance import cdist
 from api.models import *
 import time
+from api import API
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
@@ -34,30 +35,30 @@ def get_distance_matrix(v1, v2):
     distance_matrix = cdist(v1_array, v2_array, metric=lambda u, v: haversine_vector(np.array([u]), np.array([v]))[0])
     return distance_matrix
 
-def assign_customers_to_cars(cars, customers):
+def assign_customers_to_vehicles_sequential(vehicles, customers):
     """
-    Assign cars to customers iteratively until all customers are served.
+    Assign vehicles to customers iteratively until all customers are served.
     
     Parameters:
-    - cars: List of car coordinates
+    - vehicles: List of vehicle coordinates
     - customers: List of Customer objects
     
     Returns:
-    - assignment_history: A list of tuples (car index, customer index, cost) for all assignments
+    - assignment_history: A list of tuples (vehicle index, customer index, cost) for all assignments
     """
     # Track which customers have been served
     unserved_customers = customers[:]
     assignment_history = []
     
     while unserved_customers.any():
-        # Get the current positions of the cars
-        car_positions = [car.coordinate for car in cars]
-        customer_positions = [cust.initial_position for cust in unserved_customers]
+        # Get the current positions of the vehicles
+        vehicle_positions = [vehicle.position for vehicle in vehicles]
+        customer_positions = [customer.position for customer in unserved_customers]
         
         # Compute the distance matrix
-        dist = zero_pad(get_distance_matrix(customer_positions, car_positions))
+        dist = zero_pad(get_distance_matrix(customer_positions, vehicle_positions))
         
-        # Assign cars to customers using Hungarian algorithm
+        # Assign vehicles to customers using Hungarian algorithm
         row_ind, col_ind = linear_sum_assignment(dist)
         mapping = np.column_stack((row_ind, col_ind))
         costs = dist[row_ind, col_ind]
@@ -68,12 +69,12 @@ def assign_customers_to_cars(cars, customers):
         mapping = mapping[non_zero_mask]
         
         # Record assignments
-        for cost, (customer_idx, car_idx) in zip(costs, mapping):
-            assignment_history.append((car_idx, customer_idx, cost))
+        for cost, (customer_idx, vehicle_idx) in zip(costs, mapping):
+            assignment_history.append((vehicle_idx, customer_idx, cost))
         
-        # Update car positions to the destinations of assigned customers
-        for customer_idx, car_idx in mapping:
-            cars[car_idx].coordinate = unserved_customers[customer_idx].destination
+        # Update vehicle positions to the destinations of assigned customers
+        for customer_idx, vehicle_idx in mapping:
+            vehicles[vehicle_idx].coordinate = unserved_customers[customer_idx].destination
         
         # Remove served customers from the list
         unserved_customers = [
@@ -84,12 +85,10 @@ def assign_customers_to_cars(cars, customers):
         
 
 if __name__ == "__main__":
-    coordsx = np.zeros((200), dtype=object)
-    coordsy = np.zeros((50), dtype=object)
-    for n in range(200):
-        coordsx[n] = Coordinate(np.random.random()*100, np.random.random()*100)
-    for n in range(50):
-        coordsy[n] = Coordinate(np.random.random()*100, np.random.random()*100)
-    result = assign_customers_to_cars(coordsy, coordsx)
+    num_vehicles = 20
+    num_customers =100
+    scenario, customers, vehicles = API().create_and_query_scenario(num_customers = num_customers, num_vehicles = num_vehicles)
+
+
 
 
