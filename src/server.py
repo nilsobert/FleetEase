@@ -27,6 +27,10 @@ def get_fleet_statistics():
 def get_application_statistics():
  return jsonify(getApplicationStatistics(5))
 
+@app.route('/fleetData', methods=['GET'])
+def get_fleet_data():
+ return jsonify(get_fleet_data())
+
 @app.route('/updateParameters', methods=['PUT'])
 def update_parameters():
  return jsonify({'message': 'parameters updated'})
