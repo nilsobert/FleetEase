@@ -31,6 +31,7 @@ def getStatistics(length:int):
         sleep(1)
     print(f"Average RAM usage: {round(total_ram/time, 1)}%")
     print(f"Average CPU usage: {round(total_cpu/time, 1)}%")
+    return {"Average RAM usage": round(total_ram/time, 1), "Average CPU usage": round(total_cpu/time, 1)}
 
 
 if __name__ == "__main__":
