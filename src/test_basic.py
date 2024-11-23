@@ -4,7 +4,7 @@ from typing import Callable
 from scipy.spatial.distance import cdist
 from api.models import *
 import time
-from api import API
+from api.api import API
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
@@ -68,20 +68,16 @@ def assign_customers_to_vehicles_sequential(vehicles, customers):
         costs = costs[non_zero_mask]
         mapping = mapping[non_zero_mask]
         
-        # Record assignments
-        for cost, (customer_idx, vehicle_idx) in zip(costs, mapping):
-            assignment_history.append((vehicle_idx, customer_idx, cost))
-        
-        # Update vehicle positions to the destinations of assigned customers
         for customer_idx, vehicle_idx in mapping:
-            vehicles[vehicle_idx].coordinate = unserved_customers[customer_idx].destination
+            vehicles[vehicle_idx].routePlan.add_customer(customers[customer_idx])
+
         
         # Remove served customers from the list
         unserved_customers = [
             cust for idx, cust in enumerate(unserved_customers) if idx not in mapping[:, 0]
         ]
-    
-    return assignment_history
+        
+    return vehicles
         
 
 if __name__ == "__main__":

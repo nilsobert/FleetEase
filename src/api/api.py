@@ -1,8 +1,8 @@
 import httpx
 import asyncio
-from models.scenario import Scenario
-from models.customer import Customer
-from models.vehicle import Vehicle
+from api.models.scenario import Scenario
+from api.models.customer import Customer
+from api.models.vehicle import Vehicle
 
 class API:
 
