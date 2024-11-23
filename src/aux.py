@@ -21,8 +21,8 @@ def haversine_scalar(coord1: tuple, coord2: tuple) -> float:
     lat1, lon1 =coord1.as_tuple()
     lat2, lon2 = coord2.as_tuple()
 
-    lat1, lon1 = np.radians(coord1)
-    lat2, lon2 = np.radians(coord2)
+    lat1, lon1 = np.radians((lat1, lon1))
+    lat2, lon2 = np.radians((lat2, lon2))
 
     # Differences in coordinates
     dlat = lat2 - lat1
