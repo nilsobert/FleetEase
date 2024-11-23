@@ -1,4 +1,6 @@
 import numpy as np
+from scipy.spatial.distance import cdist
+
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
