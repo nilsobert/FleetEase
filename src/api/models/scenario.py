@@ -3,6 +3,8 @@ from typing import List
 from uuid import UUID
 from .vehicle import Vehicle
 from .customer import Customer
+from .routePlan import RoutePlan
+from .coordinate import Coordinate
 
 @dataclass
 class Scenario:
@@ -35,7 +37,7 @@ class Scenario:
                 Customer(**customer) for customer in scenario_data.get("customers", [])
             ],
             vehicles=[
-                Vehicle(**vehicle) for vehicle in scenario_data.get("vehicles", [])
+                Vehicle(routePlan=RoutePlan(trips=[], initial_Coords=Coordinate(vehicle["coordX"], vehicle["coordY"])), **vehicle) for vehicle in scenario_data.get("vehicles", [])
             ],
         )
     

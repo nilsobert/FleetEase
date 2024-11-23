@@ -3,6 +3,7 @@ from scipy.optimize import linear_sum_assignment
 from typing import Callable
 from scipy.spatial.distance import cdist
 from api.models import *
+import asyncio
 import time
 from api.api import API
 
@@ -81,9 +82,10 @@ def assign_customers_to_vehicles_sequential(vehicles, customers):
         
 
 if __name__ == "__main__":
+    api = API()
     num_vehicles = 20
     num_customers =100
-    scenario, customers, vehicles = API().create_and_query_scenario(num_customers = num_customers, num_vehicles = num_vehicles)
+    scenario, customers, vehicles = asyncio.run(api.create_and_query_scenario(num_of_customers = num_customers, num_of_vehicles = num_vehicles))
 
 
 
