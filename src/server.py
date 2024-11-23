@@ -1,6 +1,8 @@
 import json
 from flask import Flask, jsonify, request
 
+from applicationStatistics import getStatistics
+
 app = Flask(__name__)
 
 vehicles = [1, 2, 3, 4, 5]
@@ -22,7 +24,7 @@ def get_fleet_statistics():
 
 @app.route('/applicationStatistics', methods=['GET'])
 def get_application_statistics():
- return jsonify(application_statistics)
+ return jsonify(getStatistics(5))
 
 @app.route('/updateParameters', methods=['PUT'])
 def update_parameters():
