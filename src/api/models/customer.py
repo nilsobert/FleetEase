@@ -16,7 +16,15 @@ class Customer:
         return Coordinate(self.coordX, self.coordY)
 
     def __repr__(self):
-        return f"Customer(coordX={self.coordX}, coordY={self.coordY}, destinationX={self.destinationX}, destinationY={self.destinationX} awaitingService='{self.awaitingService}', id={self.id})"
+        return (f"Customer(\n"
+            f"    coordX={self.coordX},\n"
+            f"    coordY={self.coordY},\n"
+            f"    destinationX={self.destinationX},\n"
+            f"    destinationY={self.destinationY},\n"
+            f"    awaitingService={self.awaitingService},\n"
+            f"    id={self.id}\n"
+            f")")
+
     
     @staticmethod
     def from_json(data: dict) -> "Customer":
