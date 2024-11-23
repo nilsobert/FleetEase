@@ -6,6 +6,8 @@ import server
 import threading
 import time
 
+lock = threading.Lock()
+
 def run_server():
     app = server.create_app()
     app.run(port=5000, use_reloader=False)
@@ -21,7 +23,7 @@ def main():
     server_thread.start()
 
     print("Server started. Main program running...")
-    
+
     try:
         while True:
             start_algorithm()

@@ -3,9 +3,13 @@ import time
 from flask import Flask, jsonify, request
 from applicationStatistics import getApplicationStatistics
 from fleetStatistics import getFleetStatistics
+from .api.models.scenario import Scenario
+from .api.models.usage import Usage
+
+current_scenario = None
+usage = None
 
 def create_app():
-    """Factory function to create the Flask app."""
     app = Flask(__name__)
 
     vehicles = [1, 2, 3, 4, 5]
