@@ -4,11 +4,12 @@ import time
 from algo import Assigner
 from api.api import API
 import asyncio
+from synchronizer import Synchronizer
 
 app = Flask(__name__)
 
 # Shared data and lock
-shared_data = {"message": None}
+shared_data = Synchronizer()
 data_lock = threading.Lock()
 
 # Worker thread function
