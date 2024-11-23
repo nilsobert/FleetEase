@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from uuid import UUID
+from models.coordinate import Coordinate
 
 @dataclass
 class Vehicle:
@@ -14,5 +15,9 @@ class Vehicle:
     remainingTravelTime: int
     vehicleSpeed: int
 
+    @property
+    def position(self):
+        return Coordinate(self.coordX, self.coordY)
+
     def __repr__(self):
-        return f"Vehicle(position={self.position}, charge={self.charge}, state='{self.state}', ident={self.ident})"
+        return f"Vehicle(activeTime={self.activeTime}, coordX={self.coordX}, coordY='{self.coordY}', customerId={self.customerId}, distanceTravelled={self.distanceTravelled}, id={self.id}, isAvailable={self.isAvailable}, numberOfTrips={self.numberOfTrips}, remainingTravelTime={self.remainingTravelTime}, vehicleSpeed={self.vehicleSpeed})"  
