@@ -46,7 +46,7 @@ class API:
         return Vehicle.from_json(await self.basic_api.get_vehicle(vehicle_id))
 
     async def get_all_vehicles_for_scenario(self, scenario):
-        json_data = await self.basic_api.get_all_vehicles_for_scenario(scenario)
+        json_data = await self.basic_api.get_all_vehicles_for_scenario(scenario.id)
         vehicles = [Vehicle.from_json(vehicle_data) for vehicle_data in json_data]
         return vehicles
 
