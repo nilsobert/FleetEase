@@ -3,8 +3,8 @@ import time
 from flask import Flask, jsonify, request
 from applicationStatistics import getApplicationStatistics
 from fleetStatistics import getFleetStatistics, getFleetData
-from .api.models.scenario import Scenario
-from .api.models.usage import Usage
+#from .api.models.scenario import Scenario
+#from .api.models.usage import Usage
 
 current_scenario = None
 usage = None
