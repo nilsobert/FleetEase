@@ -1,16 +1,19 @@
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, InjectionToken, NgModule, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
-import { ApiService } from './api.service';
+//import { ApiService } from './api.service';
 import { FormsModule, NgModel } from '@angular/forms';
-
+import { CommonModule } from '@angular/common';
+import { Injectable } from '@angular/core';
+import { DataService } from './api.service';
 
 
 
  @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet,HttpClientModule, FormsModule],
+  imports: [RouterOutlet,HttpClientModule, //FormsModule, 
+  CommonModule],
 
     /*template: `
   <div>
@@ -33,24 +36,47 @@ import { FormsModule, NgModel } from '@angular/forms';
       </form>
       <pre>{{ response | json }}</pre>
  </div>`,  */
+ template: `
+    <div *ngIf="data">
+      <h1>Real-Time Data</h1>
+      <pre>{{ data | json }}</pre>
+    </div>
+  `,
+
+  styles: [],
   templateUrl: './app.component.html', 
   styleUrl: './app.component.scss'
+ 
  })
 
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'FleetEase_Frontend';
   vehicles: any;
   customers: any;
   applicationStatics: any;
-  constructor (private apiService: ApiService){}
+  data: any;
+  
+  
+  constructor (//private apiService: ApiService, 
+  private dataService: Dataservice){}
  // jsonData = {cpu_Usage: '', ramn_Usage: ''};
   
+
+
+  //constructor(private dataService: DataService) {}
+
+
+
 ngOnInit(){
-  this.getJsonvehicle();
+ // this.getJsonvehicle();
   //this.getJsonapplcation();
-  this.getJsoncustomers();
+  //this.getJsoncustomers();
+  this.dataService.getDataStream().subscribe((response) => {
+    this.data = response;
+  })
 }
 
+/*
   getJsonvehicle(){
 this.apiService.getJsonvehicle().subscribe((data)=>{this.vehicles = data;});
   }
@@ -63,7 +89,7 @@ this.apiService.getJsonvehicle().subscribe((data)=>{this.vehicles = data;});
     this.apiService.getJsonapplication().subscribe((data)=>{this.applicationStatics = data;});
   }
 
+
+*/
 }
-
-
 
