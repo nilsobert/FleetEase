@@ -35,4 +35,5 @@ def getStatistics(length:int):
 
 
 if __name__ == "__main__":
-   getStatistics(10)
+  # getStatistics(10)
+   demoLiveUsage()
