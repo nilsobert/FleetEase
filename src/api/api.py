@@ -48,6 +48,11 @@ class API:
 
     async def launch_scenario(self, speed, scenario):
         await self.scenario_runner.launch_scenario(scenario.id, speed)
+    
+    async def get_runner_scenario(self, scenario):
+        result = await self.scenario_runner.get_scenario(scenario.id)
+        print(result)
+        return Scenario.from_json()
 
     async def get_vehicle(self, vehicle_id):
         return Vehicle.from_json(await self.basic_api.get_vehicle(vehicle_id))
@@ -120,7 +125,7 @@ class _ScenarioRunnerAPI:
         self.request_handler = _RequestHandler()
 
     async def get_scenario(self, scenario_id):
-        endpoint = f"Scenarios/get_scenarios/{scenario_id}"
+        endpoint = f"Scenarios/get_scenario/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
         return await self.request_handler.get(url)
 
