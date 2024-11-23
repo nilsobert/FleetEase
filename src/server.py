@@ -3,7 +3,7 @@ from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-vehicles = []
+vehicles = [1, 2, 3, 4, 5]
 customers = []
 fleet_statistics = []
 application_statistics = []
@@ -16,11 +16,11 @@ def get_vehicles():
 def get_customers():
  return jsonify(customers)
 
-@app.route('/getFleetStatistics', methods=['GET'])
+@app.route('/fleetStatistics', methods=['GET'])
 def get_fleet_statistics():
  return jsonify(fleet_statistics)
 
-@app.route('/getApplicationStatistics', methods=['GET'])
+@app.route('/applicationStatistics', methods=['GET'])
 def get_application_statistics():
  return jsonify(application_statistics)
 
