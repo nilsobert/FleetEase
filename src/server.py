@@ -7,7 +7,7 @@ from fleetStatistics import getFleetStatistics
 app = Flask(__name__)
 
 vehicles = [1, 2, 3, 4, 5]
-customers = []
+customers = ["Alan", "Tod", "Jane"]
 fleet_statistics = []
 application_statistics = []
 

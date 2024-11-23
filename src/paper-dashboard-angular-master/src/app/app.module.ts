@@ -10,8 +10,9 @@ import { FixedPluginModule} from './shared/fixedplugin/fixedplugin.module';
 
 import { AppComponent } from './app.component';
 import { AppRoutes } from './app.routing';
-//import { HttplClient, HttpClientModule } from '@angluar/common/http';
+import { HttplClient, HttpClientModule } from '@angluar/common/http';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
+
 
 
 @NgModule({
