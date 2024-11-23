@@ -15,15 +15,15 @@ class Scenario:
     customers: List[Customer]
     vehicles: List[Vehicle]
 
-    # def __repr__(self):
-    #     return (f"Scenario(\n"
-    #         f"    id={self.id},\n"
-    #         f"    startTime={self.startTime},\n"
-    #         f"    endTime={self.endTime},\n"
-    #         f"    status={self.status},\n"
-    #         f"    customers={self.customers},\n"
-    #         f"    vehicles={self.vehicles}\n"
-    #         f")")
+    def __repr__(self):
+        return (f"Scenario(\n"
+            f"    id={self.id},\n"
+            f"    startTime={self.startTime},\n"
+            f"    endTime={self.endTime},\n"
+            f"    status={self.status},\n"
+            f"    customers={self.customers},\n"
+            f"    vehicles={self.vehicles}\n"
+            f")")
 
     @staticmethod
     def from_json(data: dict) -> "Scenario":

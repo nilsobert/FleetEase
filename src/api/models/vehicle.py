@@ -23,10 +23,18 @@ class Vehicle:
 
     def __repr__(self):
         return (
-            f"Vehicle(activeTime={self.activeTime}, coordX={self.coordX}, coordY={self.coordY}, "
-            f"customerId={self.customerId}, distanceTravelled={self.distanceTravelled}, id={self.id}, "
-            f"isAvailable={self.isAvailable}, numberOfTrips={self.numberOfTrips}, "
-            f"remainingTravelTime={self.remainingTravelTime}, vehicleSpeed={self.vehicleSpeed})"
+            f"Vehicle(\n"
+            f"    activeTime={self.activeTime},\n"
+            f"    coordX={self.coordX},\n"
+            f"    coordY={self.coordY},\n"
+            f"    customerId={self.customerId},\n"
+            f"    distanceTravelled={self.distanceTravelled},\n"
+            f"    id={self.id},\n"
+            f"    isAvailable={self.isAvailable},\n"
+            f"    numberOfTrips={self.numberOfTrips},\n"
+            f"    remainingTravelTime={self.remainingTravelTime},\n"
+            f"    vehicleSpeed={self.vehicleSpeed}\n"
+            f")"
         )
 
     @staticmethod

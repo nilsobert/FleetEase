@@ -18,9 +18,6 @@ class API:
         customers = [Customer.from_json(customer_data) for customer_data in json_data]
         return customers
 
-    async def get_scenario_metadata(self, scenario):
-        pass
-
     async def create_and_initialize_scenario(self, num_of_customers, num_of_vehicles):
         response = await self.basic_api.create_scenario(num_of_customers, num_of_vehicles)
         return Scenario.from_json(await self.scenario_runner.initialize_scenario(response))
@@ -46,11 +43,11 @@ class API:
     async def get_scenario(self, scenario_id):
         return Scenario.from_json_plain(await self.basic_api.get_scenario(scenario_id))
 
-    async def update_scenario(self, scenario):
-        pass
+    async def update_scenario(self, scenario, vehicle, customer):
+        await self.scenario_runner.update_scenario(scenario.id, vehicle.id, customer.id)
 
-    async def launch_scenario(self, scenario):
-        pass
+    async def launch_scenario(self, speed, scenario):
+        await self.scenario_runner.launch_scenario(speed, scenario.id)
 
     async def get_vehicle(self, vehicle_id):
         return Vehicle.from_json(await self.basic_api.get_vehicle(vehicle_id))
@@ -96,7 +93,7 @@ class _BasicAPI:
         return await self.request_handler.get(url)
 
     async def delete_scenario(self, scenario_id):
-        endpoint = f"scenario/{scenario_id}"
+        endpoint = f"scenarios/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
         return await self.request_handler.delete(url)
 
@@ -152,7 +149,6 @@ class _ScenarioRunnerAPI:
         }
         return await self.request_handler.post(url, params=params)
 
-    
 class _RequestHandler:
     def __init__(self, headers=None):
         self.headers = headers or {"Content-Type": "application/json"}
@@ -192,28 +188,6 @@ class _RequestHandler:
             async with httpx.AsyncClient() as client:
                 response = await client.delete(url, headers=self.headers)
                 response.raise_for_status()
-                try:
-                    return response.json()
-                except ValueError:
-                    return response.text or None
         except httpx.RequestError as e:
-            print(f"DELETE request failed: {e}")
+            print(f"PUT request failed: {e}")
             return None
-
-
-
-async def main():
-    api = API()
-    #print(await api.create_and_query_scenario(12, 23))
-    x = await api.create_and_initialize_scenario(12, 23)
-    #await api.get_customers_for_scenario(x) #"b5eedd63-db55-4a1e-8c4e-a4d2cc489e17"
-    #await api.get_all_vehicles_for_scenario(x)
-    #await api.get_customer("af0fa386-88cf-4e4f-ad22-ffc8726585f1")
-    #await api.get_scenario(x.id)
-    #await api.get_all_scenarios()
-    await api.delete_scenario(x)
-
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
