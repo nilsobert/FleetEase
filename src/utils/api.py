@@ -1,11 +1,12 @@
 import requests
-from scenario import Scenario
+#from scenario import Scenario
 
 
 class API:
 
     def __init__(self) -> None:
-        _BasicAPI.__init__(self, )
+        self.basic_api = _BasicAPI()
+        self.scenario_runner = _ScenarioRunnerAPI()
 
     def get_customer(customer):
         return _BasicAPI.get_customer(customer.id)
@@ -16,9 +17,9 @@ class API:
     def get_scenario_metadata(scenario):
         pass
 
-    def create_and_initialize_scenario(scenario):
-        response = _BasicAPI.create_scenario(scenario)
-        _ScenarioRunnerAPI.initialize_scenario(response)
+    def create_and_initialize_scenario(self, scenario):
+        response = self.basic_api.create_scenario(23, 34)
+        self.scenario_runner.initialize_scenario(response)
 
     def get_all_scenarios():
         pass
@@ -45,6 +46,9 @@ class API:
 
 class _BasicAPI:
     base_url = 'http://159.65.113.122:8080'
+    
+    def __init__(self) -> None:
+        self.request_handler = _RequestHandler()
 
     def get_customer(self, customer_id):
         endpoint = 'customers'
@@ -52,17 +56,17 @@ class _BasicAPI:
         params = {
             "customerId": customer_id,
         } 
-        return _RequestHandler(url, params=params)
+        return self.request_handler(url, params=params)
 
     def get_customers_for_scenario(self, scenario_id):
         endpoint = f"scenarios/{scenario_id}/customers"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.get(url)
+        return self.request_handler.get(url)
 
     def get_scenario_metadata(self, scenario_id):
         endpoint = f"scenarios/{scenario_id}/metadata"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.get(url)
+        return self.request_handler.get(url)
 
     def create_scenario(self, num_of_customers, num_of_vehicles):
         endpoint = 'scenario/create'
@@ -71,45 +75,48 @@ class _BasicAPI:
             "numberOfVehicles": num_of_vehicles,
             "numberOfCustomers": num_of_customers
         }
-        return _RequestHandler.post(url, params=params)
+        return self.request_handler.post(url, params=params)
 
     def get_all_scenarios(self):
         endpoint = 'scenarios'
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.post(url)
+        return self.request_handler.post(url)
 
     def delete_scenario(self, scenario_id):
         endpoint = f"scenario/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.delete(url)
+        return self.request_handler.delete(url)
 
     def get_scenario(self, scenario_id):
         endpoint = f"scenarios/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.get(url)
+        return self.request_handler.get(url)
 
     def get_all_vehicles_for_scenario(self, scenario_id):
         endpoint = f"scenarios/{scenario_id}/vehicles"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.get(url)
+        return self.request_handler.get(url)
 
     def get_vehicle(self, vehicle_id):
         endpoint = f"vehicles/{vehicle_id}"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.get(url)
+        return self.request_handler.get(url)
 
 class _ScenarioRunnerAPI:
     base_url = 'http://159.65.113.122:8090'
 
+    def __init__(self) -> None:
+        self.request_handler = _RequestHandler()
+
     def get_scenario(self, scenario_id):
         endpoint = f"Scenarios/get_scenarios/{scenario_id}"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.get(url)
+        return self.request_handler.get(url)
 
     def initialize_scenario(self, body):
         endpoint = f"Scenarios/initialize_scenario"
         url = f"{self.base_url}/{endpoint}"
-        return _RequestHandler.post(url)
+        return self.request_handler.post(url)
 
     def update_scenario(self, scenario_id, vehicle_id, customer_id):
         endpoint = f"/Scenarios/update_scenario/{scenario_id}"
@@ -122,7 +129,7 @@ class _ScenarioRunnerAPI:
                 }
             ]
         }
-        return _RequestHandler.put(url, data=payload)
+        return self.request_handler.put(url, data=payload)
 
     def launch_scenario(self, scenario_id, speed):
         endpoint = f"/Runner/launch_scenario/{scenario_id}"
@@ -130,14 +137,14 @@ class _ScenarioRunnerAPI:
         params = {
             "speed": speed
         }
-        return _RequestHandler.post(url, params=params)
+        return self.request_handler.post(url, params=params)
 
     
 class _RequestHandler:
     def __init__(self, headers=None):
         self.headers = headers or {"Content-Type": "application/json"}
 
-    def get(self, url, endpoint, params=None):
+    def get(self, url, params=None):
         try:
             response = requests.get(url, params=params, headers=self.headers)
             response.raise_for_status()
@@ -172,3 +179,8 @@ class _RequestHandler:
         except requests.exceptions.RequestException as e:
             print(f"DELETE request failed: {e}")
             return None
+        
+if __name__ == "__main__":
+    scenario = 342
+    api = API()
+    api.create_and_initialize_scenario(scenario)
