@@ -1,8 +1,9 @@
-from aux import *
+from models import *
 import numpy as np
 from scipy.optimize import linear_sum_assignment
 from typing import Callable
 from scipy.spatial.distance import cdist
+import time
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
@@ -34,23 +35,49 @@ def get_distance_matrix(v1, v2):
     return distance_matrix
 
 class Assigner:
-    def __init__(self, vehicles:list[Vehicle], passengers:list[Passenger], algorithm:str="basic") -> None:
-        self.algorithm:str = algorithm
+    def __init__(self, vehicles:list[Vehicle], customers:list[Customer], algorithm:str="basic") -> None:
+        self.algorithm: str = algorithm
         self.assign: Callable = self.get_function()
         self.vehicles: list[Vehicle] = vehicles
-        self.passengers: list[Passenger] = passengers
+        self.customers: list[Customer] = customers
     
     def get_function(self) -> Callable:
         match self.algorithm:
             case "basic":
                 return self.basic
     
-    def basic():
+    def basic(self):
+        coordsx, coordsy = [customer.coordinate for customer in self.customers], [vehicle.coordinate for vehicle in self.vehicles]
+        dist = zero_pad(get_distance_matrix(coordsx, coordsy))
+        row_ind, col_ind = linear_sum_assignment(dist)
+        mapping = np.column_stack((row_ind, col_ind))
+        costs = dist[row_ind, col_ind]
+
+        non_zero_mask = costs != 0
+        costs = costs[non_zero_mask]
+        mapping = mapping[non_zero_mask]
+
+        for cost, (customer, vehicle) in zip(costs, mapping):
+            print(cost, customer, vehicle)
         
-        return linear_sum_assignment()
 
 if __name__ == "__main__":
-    coordsx = np.array([Coordinate(52.5200, 13.4050), Coordinate(40.7128, -74.0060), Coordinate(34.0522, -118.2437)])
-    coordsy = np.array([Coordinate(48.8566, 2.3522), Coordinate(55.7558, 37.6173)])
+    coordsx = np.zeros((200), dtype=object)
+    coordsy = np.zeros((50), dtype=object)
+    for n in range(200):
+        coordsx[n] = Coordinate(np.random.random()*100, np.random.random()*100)
+    for n in range(50):
+        coordsy[n] = Coordinate(np.random.random()*100, np.random.random()*100)
     dist = zero_pad(get_distance_matrix(coordsx, coordsy))
-    
+    row_ind, col_ind = linear_sum_assignment(dist)
+    mapping = np.column_stack((row_ind, col_ind))
+    costs = dist[row_ind, col_ind]
+
+    non_zero_mask = costs != 0
+    costs = costs[non_zero_mask]
+    mapping = mapping[non_zero_mask]
+
+    for cost, (customer, vehicle) in zip(costs, mapping):
+            print(cost, customer, vehicle)
+
+

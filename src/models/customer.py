@@ -1,4 +1,4 @@
-from coordinate import *
+from .coordinate import *
 
 class Customer:
     def __init__(self, initial_position:Coordinate, destination:Coordinate, state="waiting", ident:str="def_pass"):

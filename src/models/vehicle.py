@@ -1,4 +1,4 @@
-from coordinate import *
+from .coordinate import *
 
 class Vehicle:
     def __init__(self, position:Coordinate, charge:int=100, state="idle", ident:str="def_veh"):
