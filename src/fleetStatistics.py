@@ -21,12 +21,6 @@ def get_time_passed():
 def get_total_distance_finished_rides():
     return 30
 
-def get_amount_of_customers_waiting():
-    return 0
-
-def get_routePlans():
-    return []
-
 def getFleetData():
     carId = 1
     status = 1
@@ -59,7 +53,7 @@ def getFleetStatistics():
     productive_ratio = get_total_distance_finished_rides()/get_total_distance_travelled() # ratio of productive driving
     idle_ratio = get_total_distance_travelled()/(get_time_passed()/60*velocity_in_km_per_hour)
     return {"Total consumption (kWh)": round(total_consumption,rounding_decimals), "Productive ratio": round(productive_ratio,rounding_decimals),
-            "Idle ratio": round(idle_ratio,rounding_decimals), "Amount of customers waiting": get_amount_of_customers_waiting()}
+            "Idle ratio": round(idle_ratio,rounding_decimals)}
 
 if __name__ == "__main__":
     print(getFleetData())
