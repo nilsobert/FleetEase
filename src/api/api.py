@@ -181,9 +181,7 @@ class _RequestHandler:
     async def put(self, url, data=None):
         try:
             async with httpx.AsyncClient() as client:
-                print("1")
                 response = await client.put(url, json=data, headers=self.headers)
-                print("2")
                 print(response.json())
                 response.raise_for_status()
                 # Return the JSON response if successful

@@ -52,7 +52,7 @@ def init():
 if __name__ == "__main__":
     scenario, vehicles, customers, api = init()
     # Start the worker thread
-    thread = threading.Thread(target=assignement_worker, args=(scenario, vehicles, customers, api,) daemon=True)
+    thread = threading.Thread(target=assignement_worker, args=(scenario, vehicles, customers, api))
     thread.start()
 
     # Start the Flask server

@@ -61,8 +61,9 @@ class Assigner:
         self.scenario = new_scenario
         self.free_vehicles = [v for v in self.scenario.vehicles if v.isAvailable]
         self.busy_vehicles = [v for v in self.scenario.vehicles if not v.isAvailable]
-        self.unserved_customers = [v for v in self.scenario.customers if v.awaitingService]
-        self.served_customers = [v for v in self.scenario.customers if not v.awaitingService]
+        next_customers_id = [a.customerId for a in self.busy_vehicles]
+        self.unserved_customers = [v for v in self.scenario.customers if v.awaitingService and not v.id in next_customers_id]
+        self.served_customers = [v for v in self.scenario.customers if not v.awaitingService or v.id in next_customers_id]
 
     
     def basic(self):

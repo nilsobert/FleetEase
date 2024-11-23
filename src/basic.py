@@ -47,11 +47,13 @@ def basic_procedual_assignement(scenario, vehicles, customers, api):
 
 def basic_loop(self):
     while self.unserved_customers:
-        time.sleep(1)
+        time.sleep(5)
+        print(".")
         updated_scenario = asyncio.run(self.api.get_runner_scenario(self.scenario))
-        self.unpack_scenario()
+        self.unpack_scenario(updated_scenario)
         if self.free_vehicles:
-            _, _free_vehicles, _buys_vehicles, _unserved_customers, _served_customers = basic_procedual_assignement(self.scenario, self.vehicles, self.customers, self.api)
+            print(f"------------------------------{len(self.unserved_customers)}")
+            _, _free_vehicles, _buys_vehicles, _unserved_customers, _served_customers = basic_procedual_assignement(self.scenario, self.free_vehicles, self.unserved_customers, self.api)
             self.free_vehicles = _free_vehicles
             self.busy_vehicles += _buys_vehicles
             self.unserved_customers = _unserved_customers
