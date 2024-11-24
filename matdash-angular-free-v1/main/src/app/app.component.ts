@@ -13,7 +13,7 @@ import { SharedService } from './shared.service';
 export class AppComponent implements OnInit, OnDestroy {
   title = 'Modernize Angular Admin Template';
   
-  public vehicles: any;
+  public systemsettings: any;
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -27,8 +27,8 @@ export class AppComponent implements OnInit, OnDestroy {
         this.apiService.getData().subscribe({
           next: (response) => {
             console.log('API Response:', response);
-            this.vehicles = response;
-            this.sharedService.setVehicles(this.vehicles);
+            this.systemsettings = response;
+            this.sharedService.setSystemsharefunction(this.systemsettings);
           },
           error: (err) => {
             console.error('Error fetching data:', err);

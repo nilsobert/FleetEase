@@ -56,7 +56,7 @@ export class AppRevenueForecastComponent implements OnInit , OnDestroy{
   ];
 
   selectedMonth: string = 'CPU';
-  vehicle: any;
+  systemdata: any;
   valueCPU1: number[] = [];
   valueCPU2: number[] = [];
   private subscription: Subscription = new Subscription();
@@ -67,11 +67,12 @@ export class AppRevenueForecastComponent implements OnInit , OnDestroy{
 
   ngOnInit() {
     this.subscription.add(
-      this.sharedService.vehicles$.subscribe(vehicles => {
-        this.vehicle = vehicles;
+      this.sharedService.system$.subscribe((systemsshare) => {
+        this.systemdata = systemsshare;
       })
     );
   }
+
 
   ngOnDestroy() {
     if (this.subscription) {

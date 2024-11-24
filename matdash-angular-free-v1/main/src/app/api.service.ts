@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 }) // Automatically provides this service application-wide
 export class ApiService {
-  private apiUrl = 'http://159.65.113.122:5000/vehicles'; // Replace with your Python API endpoint
+  private apiUrl = 'http://161.35.199.190:5000/system'; // Replace with your Python API endpoint
 
   constructor(private http: HttpClient) {}
 

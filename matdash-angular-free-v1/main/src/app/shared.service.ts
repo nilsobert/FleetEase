@@ -5,10 +5,10 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class SharedService {
-  private vehiclesSubject = new BehaviorSubject<any>(null);
-  vehicles$ = this.vehiclesSubject.asObservable();
+  private systemSubject = new BehaviorSubject<any>(null);
+  system$ = this.systemSubject.asObservable();
 
-  setVehicles(vehicles: any) {
-    this.vehiclesSubject.next(vehicles);
+  setSystemsharefunction(systemshare: any) {
+    this.systemSubject.next(systemshare);
   }
 }

@@ -20,7 +20,7 @@ export class StreamComponent implements OnInit {
 
   ngOnInit(): void {
     this.streamService.connectToStream(
-      'http://172.0.0.1:5000/test_streaming',
+      'http://161.35.199.190:5000/system',
       (data) => (this.data = data), // Update data on each JSON object
       (err) => (this.error = `Stream error: ${err.message || err}`)
     );
