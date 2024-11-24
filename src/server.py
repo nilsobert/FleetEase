@@ -1,50 +1,50 @@
 import json
 import time
 from flask import Flask, jsonify, request
-from applicationStatistics import getApplicationStatistics
+#from api.src.systemStatistics import getApplicationStatistics
 from fleetStatistics import getFleetStatistics, getFleetData
-#from .api.models.scenario import Scenario
-#from .api.models.usage import Usage
+from synchronizer import Synchronizer
+import threading
 
-current_scenario = None
-usage = None
+app = Flask(__name__)
 
-def create_app():
-    app = Flask(__name__)
+# Shared data and lock
+global synchronizer
+synchronizer = Synchronizer()
+data_lock = threading.Lock()
 
-    vehicles = [1, 2, 3, 4, 5]
-    customers = ["Alan", "Tod", "Jane"]
-    fleet_statistics = []
-    application_statistics = []
 
-    @app.route('/vehicles', methods=['GET'])
-    def get_vehicles():
-        return jsonify(vehicles)
+@app.route('/car_state', methods=['GET'])
+def get_car_state():
+    global synchronizer
+    return jsonify(synchronizer.fleet.vehicles_states)
 
-    @app.route('/customers', methods=['GET'])
-    def get_customers():
-        return jsonify(customers)
+@app.route('/service', methods=['GET'])
+def get_arrivals():
+    global synchronizer
+    num_waiting = synchronizer.fleet.num_waiting
+    num_served = synchronizer.fleet.num_served
+    out = {
+        "num_waiting": num_waiting,
+        "num_served": num_served
+    }
+    return jsonify(out)
 
-    @app.route('/fleetStatistics', methods=['GET'])
-    def get_fleet_statistics():
-        return jsonify(getFleetStatistics())
+@app.route('/consumption', methods=['GET'])
+def get_consumption():
+    global synchronizer
+    total_active_time = synchronizer.fleet.total_active_time
+    energy_consumed_total = synchronizer.fleet.energy_consumed_total
+    total_distance_travelled = synchronizer.fleet.total_distance_travelled
+    out = {
+        "total_active_time":total_active_time,
+        "energy_consumed_total":energy_consumed_total,
+        "total_distance_travelled":total_distance_travelled
+    }
+    return jsonify(out)
 
-    @app.route('/applicationStatistics', methods=['GET'])
-    def get_application_statistics():
-        return jsonify(getApplicationStatistics(5))
+@app.route('/system', methods=['GET'])
+def get_system():
+    global synchronizer
+    return jsonify(synchronizer.system)
 
-    @app.route('/fleetData', methods=['GET'])
-    def get_fleet_data():
-        return jsonify(getFleetData())
-
-    @app.route('/test_streaming')
-    def test_streaming():
-        def generate():
-            for i in range(100000):
-                time.sleep(1)
-                # Yield a JSON object as a string
-                yield json.dumps({"value": i}) + "\n"
-
-        return app.response_class(generate(), mimetype='application/json')
-
-    return app

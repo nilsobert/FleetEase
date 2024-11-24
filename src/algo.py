@@ -40,7 +40,8 @@ def get_distance_matrix(v1, v2):
     return distance_matrix
 
 class Assigner:
-    def __init__(self, scenario: Scenario, vehicles:list[Vehicle], customers:list[Customer], api:API, algorithm:str="basic") -> None:
+    def __init__(self, scenario: Scenario, vehicles:list[Vehicle], customers:list[Customer], api:API, algorithm:str="basic", debug=False) -> None:
+        self.debug = debug
         self.api = api
         self.scenario = scenario
         self.algorithm: str = algorithm
@@ -66,14 +67,16 @@ class Assigner:
         self.served_customers = [v for v in self.scenario.customers if not v.awaitingService or v.id in next_customers_id]
 
     
-    def basic(self):
-        print("Initial assignement:")
+    def basic(self, synchronizer, data_lock):
+        if self.debug:
+            print("Initial assignement:")
         _, self.free_vehicles, self.buys_vehicles, self.unserved_customers, self.served_customers = basic_initial_assignement(self.scenario, self.vehicles, self.customers, self.api)
-        print(f"    {len(self.free_vehicles)} free vehicles")
-        print(f"    {len(self.buys_vehicles)} busy vehicles")
-        print(f"    {len(self.unserved_customers)} unserved customers")
-        print(f"    {len(self.served_customers)} served customers")
-        basic_loop(self)
+        if self.debug:
+            print(f"    {len(self.free_vehicles)} free vehicles")
+            print(f"    {len(self.buys_vehicles)} busy vehicles")
+            print(f"    {len(self.unserved_customers)} unserved customers")
+            print(f"    {len(self.served_customers)} served customers")
+        basic_loop(self, synchronizer, data_lock)
         
 
 if __name__ == "__main__":
