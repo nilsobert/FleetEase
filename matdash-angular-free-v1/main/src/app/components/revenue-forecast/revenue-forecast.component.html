@@ -1,3 +1,4 @@
+
 <mat-card class="cardWithShadow">
     <mat-card-content>
       <div class="hstack align-items-center flex-column flex-lg-row">
@@ -6,13 +7,14 @@
         </div>
         <div class="m-l-auto">
             <mat-form-field class="theme-select" appearance="outline">
-                <mat-select value="mar">
-                  @for(month of months; track month.viewValue ) {
-                  <mat-option [value]="month.value">
-                    {{ month.viewValue }}
-                  </mat-option>
+                <mat-select [(value)]="selectedMonth" (selectionChange)="onMonthChange()">
+                  @for(month of months; track month.viewValue) {
+                    <mat-option [value]="month.value">
+                      {{ month.viewValue }}
+                    </mat-option>
                   }
                 </mat-select>
+
               </mat-form-field>
         </div>
       </div>
