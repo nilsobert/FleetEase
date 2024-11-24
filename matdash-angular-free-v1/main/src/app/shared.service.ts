@@ -2,15 +2,13 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SharedService {
-  // Using BehaviorSubject to share data
-  private jsonDataSource = new BehaviorSubject<any>(null);
-  jsonData$ = this.jsonDataSource.asObservable();
+  private vehiclesSubject = new BehaviorSubject<any>(null);
+  vehicles$ = this.vehiclesSubject.asObservable();
 
-  // Method to update the value
-  updateValue(data: any){
-    this.jsonDataSource.next(data);
+  setVehicles(vehicles: any) {
+    this.vehiclesSubject.next(vehicles);
   }
 }

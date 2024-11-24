@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import {
@@ -15,6 +15,8 @@ import {
 } from 'ng-apexcharts';
 import { AppComponent } from 'src/app/app.component';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { SharedService } from '../../shared.service';
 
 export interface RevenueForecastChart {
   series: ApexAxisChartSeries;
@@ -38,9 +40,10 @@ interface Month {
   imports: [MaterialModule, TablerIconsModule, NgApexchartsModule, FormsModule],
   templateUrl: './revenue-forecast.component.html',
 })
-export class AppRevenueForecastComponent {
+export class AppRevenueForecastComponent implements OnInit , OnDestroy{
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
   public revenueForecastChart!: Partial<RevenueForecastChart> | any;
+
  
   onMonthChange() {
     this.updateChartData();
@@ -53,14 +56,28 @@ export class AppRevenueForecastComponent {
   ];
 
   selectedMonth: string = 'CPU';
+  vehicle: any;
   valueCPU1: number[] = [];
   valueCPU2: number[] = [];
-
-  constructor() {
+  private subscription: Subscription = new Subscription();
+  constructor(private sharedService: SharedService) {
     this.updateChartData();
     this.initChart();
   }
 
+  ngOnInit() {
+    this.subscription.add(
+      this.sharedService.vehicles$.subscribe(vehicles => {
+        this.vehicle = vehicles;
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
   updateChartData() {
     if (this.selectedMonth === 'CPU') {
       this.valueCPU1 = [30, 40, 25, 43, 51, 37];
