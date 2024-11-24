@@ -45,7 +45,7 @@ def basic_procedual_assignement(scenario, vehicles, customers, api):
     return basic_initial_assignement(scenario, vehicles, customers, api)
 
 
-def basic_loop(self):
+def basic_loop(self, synchronizer, data_lock):
     while self.unserved_customers:
         time.sleep(5)
         print(".")
@@ -58,4 +58,6 @@ def basic_loop(self):
             self.busy_vehicles += _buys_vehicles
             self.unserved_customers = _unserved_customers
             self.served_customers += _served_customers
+        with data_lock:
+            synchronizer.fleet.scenario = self.scenario
 

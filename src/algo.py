@@ -66,14 +66,14 @@ class Assigner:
         self.served_customers = [v for v in self.scenario.customers if not v.awaitingService or v.id in next_customers_id]
 
     
-    def basic(self):
+    def basic(self, synchronizer, data_lock):
         print("Initial assignement:")
         _, self.free_vehicles, self.buys_vehicles, self.unserved_customers, self.served_customers = basic_initial_assignement(self.scenario, self.vehicles, self.customers, self.api)
         print(f"    {len(self.free_vehicles)} free vehicles")
         print(f"    {len(self.buys_vehicles)} busy vehicles")
         print(f"    {len(self.unserved_customers)} unserved customers")
         print(f"    {len(self.served_customers)} served customers")
-        basic_loop(self)
+        basic_loop(self, synchronizer, data_lock)
         
 
 if __name__ == "__main__":
