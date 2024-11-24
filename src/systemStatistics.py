@@ -25,7 +25,7 @@ class System:
             sleep(self.interval)
             
     
-    def json(self):
+    def to_json(self):
         return {
             "cpu":self.cpu,
             "ram": self.ram,

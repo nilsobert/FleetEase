@@ -9,6 +9,11 @@ example_coordinate_array = [Coordinate(1, 2), Coordinate(2, 4), Coordinate(4, 6)
 #example_customer_array = [Customer(False, 1, 2, 3, 4, "1"), Customer(True, 2, 4, 6, 8, "2")
 
 
+def trigger_calculation(scenario):
+    get_total_distance_finished_rides = get_total_distance_finished_rides()
+    get_total_distance_travelled = get_total_distance_travelled()
+    consumption_in_kwh_per_100_km = 
+
 # in kilometer: number($float)
 def get_total_distance_travelled():
     return 40
