@@ -58,7 +58,7 @@ class API:
 
     async def get_all_vehicles_for_scenario(self, scenario):
         json_data = await self.basic_api.get_all_vehicles_for_scenario(scenario.id)
-        print(json_data)
+        #print(json_data)
         vehicles = [Vehicle.from_json(vehicle_data) for vehicle_data in json_data]
         return vehicles
 
@@ -182,7 +182,7 @@ class _RequestHandler:
         try:
             async with httpx.AsyncClient() as client:
                 response = await client.put(url, json=data, headers=self.headers)
-                print(response.json())
+                #print(response.json())
                 response.raise_for_status()
                 # Return the JSON response if successful
                 return response.json()

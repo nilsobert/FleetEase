@@ -58,6 +58,6 @@ def basic_loop(self, synchronizer, data_lock):
             self.busy_vehicles += _buys_vehicles
             self.unserved_customers = _unserved_customers
             self.served_customers += _served_customers
-        with data_lock:
-            synchronizer.fleet.scenario = self.scenario
+            with data_lock:
+                synchronizer.fleet.scenario = self.scenario
 
