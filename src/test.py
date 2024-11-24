@@ -22,13 +22,24 @@ def init_api():
 
     
 
-def test_run():
+def test_run_basic():
+    global synchronizer
+    
+    times = []
+    distances = []
     scenario, vehicles, customers, api = init_api()
     algorithm = "basic"
-    st = time.time()
-    assigner = Assigner(scenario=scenario, vehicles=vehicles, customers=customers, api=api, algorithm=algorithm, debug=False)
-    assigner.assign(synchronizer, data_lock)
-    print(time.time(-st)
+    for a in range(10):
+        st = time.time()
+        assigner = Assigner(scenario=scenario, vehicles=vehicles, customers=customers, api=api, algorithm=algorithm, debug=False)
+        assigner.assign(synchronizer, data_lock)
+        t = time.time()-st
+        distance = synchronizer.fleet.total_distance_travelled
+        synchronizer.reset()
+        times.append(t)
+        distances.append(distance)
+        print(time, distance)
+    print(times, distances)
 
 if __name__ == "__main__":
-   
+   test_run_basic()
