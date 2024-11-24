@@ -23,7 +23,7 @@ def get_car_state():
 def get_arrivals():
     global synchronizer
     num_waiting = synchronizer.fleet.num_waiting
-    num_served = synchronizer.fleet.num_arrived
+    num_served = synchronizer.fleet.num_served
     out = {
         "num_waiting": num_waiting,
         "num_served": num_served

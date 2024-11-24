@@ -16,7 +16,7 @@ class Fleet:
     total_distance_travelled: float
     vehicles_states: list[dict]
     num_waiting: int
-    num_arrived: int
+    num_served: int
     _scenario: Optional[Scenario] = field(default=None, init=False)  # Private field for property storage
 
     @property

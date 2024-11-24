@@ -47,7 +47,7 @@ def basic_procedual_assignement(scenario, vehicles, customers, api):
 
 def basic_loop(self, synchronizer, data_lock):
     while self.unserved_customers:
-        time.sleep(5)
+        time.sleep(2)
         #print(".")
         updated_scenario = asyncio.run(self.api.get_runner_scenario(self.scenario))
         self.unpack_scenario(updated_scenario)
