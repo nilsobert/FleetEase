@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 import { TablerIconsModule } from 'angular-tabler-icons';
 import {
@@ -13,8 +13,12 @@ import {
   NgApexchartsModule,
   ApexFill,
 } from 'ng-apexcharts';
+import { AppComponent } from 'src/app/app.component';
+import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { SharedService } from '../../shared.service';
 
-export interface revenueForecastChart {
+export interface RevenueForecastChart {
   series: ApexAxisChartSeries;
   chart: ApexChart;
   dataLabels: ApexDataLabels;
@@ -25,7 +29,7 @@ export interface revenueForecastChart {
   fill: ApexFill;
 }
 
-interface month {
+interface Month {
   value: string;
   viewValue: string;
 }
@@ -33,32 +37,69 @@ interface month {
 @Component({
   selector: 'app-revenue-forecast',
   standalone: true,
-  imports: [MaterialModule, TablerIconsModule, NgApexchartsModule],
+  imports: [MaterialModule, TablerIconsModule, NgApexchartsModule, FormsModule],
   templateUrl: './revenue-forecast.component.html',
 })
-export class AppRevenueForecastComponent {
+export class AppRevenueForecastComponent implements OnInit , OnDestroy{
   @ViewChild('chart') chart: ChartComponent = Object.create(null);
-  public revenueForecastChart!: Partial<revenueForecastChart> | any;
+  public revenueForecastChart!: Partial<RevenueForecastChart> | any;
 
-  months: month[] = [
-    { value: 'mar', viewValue: 'Sep 2024' },
-    { value: 'apr', viewValue: 'Oct 2024' },
-    { value: 'june', viewValue: 'Nov 2024' },
+ 
+  onMonthChange() {
+    this.updateChartData();
+    this.initChart();
+  }
+
+  months: Month[] = [
+    { value: 'CPU', viewValue: 'CPU Outage' },
+    { value: 'RAM', viewValue: 'RAM Outage' },
   ];
 
-  constructor() {
+  selectedMonth: string = 'CPU';
+  vehicle: any;
+  valueCPU1: number[] = [];
+  valueCPU2: number[] = [];
+  private subscription: Subscription = new Subscription();
+  constructor(private sharedService: SharedService) {
+    this.updateChartData();
+    this.initChart();
+  }
+
+  ngOnInit() {
+    this.subscription.add(
+      this.sharedService.vehicles$.subscribe(vehicles => {
+        this.vehicle = vehicles;
+      })
+    );
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  updateChartData() {
+    if (this.selectedMonth === 'CPU') {
+      this.valueCPU1 = [30, 40, 25, 43, 51, 37];
+      this.valueCPU2 = [20, 26, 13, 32, 40, 20];
+    } else {
+      this.valueCPU1 = [40, 50, 35, 53, 61, 47];
+      this.valueCPU2 = [30, 36, 23, 42, 50, 30];
+    }
+  }
+
+  initChart() {
     this.revenueForecastChart = {
       series: [
         {
           name: 'Random Algorithm',
-          data: [30,40, 25, 43, 51, 37],
+          data: this.valueCPU1,
         },
         {
           name: 'FleetEase Algorithm',
-          data: [20, 26, 13, 32, 40, 20],
+          data: this.valueCPU2,
         },
       ],
-
       chart: {
         type: 'line',
         fontFamily: 'inherit',
@@ -106,7 +147,6 @@ export class AppRevenueForecastComponent {
           },
         },
       },
-
       yaxis: {
         min: 0,
         max: 100,
@@ -140,3 +180,4 @@ export class AppRevenueForecastComponent {
     };
   }
 }
+
