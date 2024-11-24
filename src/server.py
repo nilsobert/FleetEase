@@ -8,7 +8,7 @@ from synchronizer import Synchronizer
 import threading
 
 app = Flask(__name__)
-app = CORS(app)
+CORS(app)
 
 # Shared data and lock
 global synchronizer
