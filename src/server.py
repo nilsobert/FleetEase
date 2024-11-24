@@ -8,6 +8,10 @@ from synchronizer import Synchronizer
 import threading
 
 app = Flask(__name__)
+<<<<<<< HEAD
+=======
+CORS(app)
+>>>>>>> 3bdc751e99bbb6810fb4289564dc5df078adf2f5
 
 # Shared data and lock
 global synchronizer
