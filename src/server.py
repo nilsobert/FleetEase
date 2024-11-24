@@ -1,7 +1,7 @@
 import json
 import time
 from flask import Flask, jsonify, request
-from applicationStatistics import getApplicationStatistics
+from systemStatistics import System
 from fleetStatistics import getFleetStatistics, getFleetData
 #from .api.models.scenario import Scenario
 #from .api.models.usage import Usage

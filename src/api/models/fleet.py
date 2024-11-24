@@ -5,6 +5,7 @@ from .vehicle import Vehicle
 from .customer import Customer
 from .routePlan import RoutePlan
 from .coordinate import Coordinate
+from .scenario import Scenario
 
 @dataclass
 class Fleet:
@@ -12,3 +13,8 @@ class Fleet:
     velocity_in_km_per_hour: float
     total_time_traveled: int
     total_distance_finished_rides: float
+    scenario: Scenario
+
+    @scenario.setter
+    def scenario(self, value):
+        self.scenario = value
