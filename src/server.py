@@ -1,12 +1,14 @@
 import json
 import time
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 #from api.src.systemStatistics import getApplicationStatistics
 from fleetStatistics import getFleetStatistics, getFleetData
 from synchronizer import Synchronizer
 import threading
 
 app = Flask(__name__)
+app = CORS(app)
 
 # Shared data and lock
 global synchronizer
