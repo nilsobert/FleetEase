@@ -17,9 +17,10 @@ import { AppComponent } from 'src/app/app.component';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { SharedService } from '../../shared.service';
+import { record, array, number, decodeType, decode } from 'typescript-json-decoder';
 
 export interface RevenueForecastChart {
-  series: ApexAxisChartSeries;
+  series: ApexAxisChartSeries; 
   chart: ApexChart;
   dataLabels: ApexDataLabels;
   plotOptions: ApexPlotOptions;
@@ -33,6 +34,14 @@ interface Month {
   value: string;
   viewValue: string;
 }
+
+export const systemDecoder = record({
+  cpu: array(number),
+  ram: array(number),
+  time: array(number), 
+});
+
+export type System = decodeType<typeof systemDecoder>;
 
 @Component({
   selector: 'app-revenue-forecast',
@@ -65,10 +74,20 @@ export class AppRevenueForecastComponent implements OnInit , OnDestroy{
     this.initChart();
   }
 
+  system: Promise<System> | null = null;
+  cpu: number[] = [];
+  ram: number[] = [];
+  time: number[] = [];
+  error: string | null = null; 
+
   ngOnInit() {
     this.subscription.add(
       this.sharedService.system$.subscribe((systemsshare) => {
         this.systemdata = systemsshare;
+        this.cpu = systemsshare.cpu;
+        this.ram = systemsshare.ram;
+        this.time = systemsshare.time;
+        this.updateChartData();
       })
     );
   }
@@ -81,11 +100,9 @@ export class AppRevenueForecastComponent implements OnInit , OnDestroy{
   }
   updateChartData() {
     if (this.selectedMonth === 'CPU') {
-      this.valueCPU1 = [30, 40, 25, 43, 51, 37];
-      this.valueCPU2 = [20, 26, 13, 32, 40, 20];
+      this.valueCPU1 = this.cpu;
     } else {
-      this.valueCPU1 = [40, 50, 35, 53, 61, 47];
-      this.valueCPU2 = [30, 36, 23, 42, 50, 30];
+      this.valueCPU1 = this.ram;
     }
   }
 

@@ -12,3 +12,12 @@ export class SharedService {
     this.systemSubject.next(systemshare);
   }
 }
+
+export class SharedServiceCar {
+  private carSubject = new BehaviorSubject<any>(null);
+  car$ = this.carSubject.asObservable();
+
+  setCarsharefunction(carshare: any) {
+    this.carSubject.next(carshare);
+  }
+}

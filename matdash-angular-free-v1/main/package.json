@@ -31,6 +31,7 @@
     "rxjs": "~7.5.0",
     "sass": "^1.57.1",
     "tslib": "^2.3.0",
+    "typescript-json-decoder": "^1.0.11",
     "zone.js": "~0.14.2"
   },
   "devDependencies": {

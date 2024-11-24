@@ -1,8 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { MaterialModule } from '../../material.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
+import { SharedServiceCar } from '../../shared.service';
+import { record, array, number, decodeType, decode } from 'typescript-json-decoder';
+import { RouterOutlet } from '@angular/router';
+import { Subscription, interval } from 'rxjs';
+import { ApiServiceCarFleet } from '../../api.service';
+import { OnInit } from '@angular/core';
 
 export interface productsData {
   id: number;
@@ -63,9 +69,38 @@ const ELEMENT_DATA: productsData[] = [
   imports: [MaterialModule, MatMenuModule, MatButtonModule, CommonModule],
   templateUrl: './revenue-product.component.html',
 })
-export class AppRevenueProductComponent {
+export class AppRevenueProductComponent //implements OnInit, OnDestroy 
+{
   displayedColumns: string[] = ['assigned', 'progress', 'priority', 'budget'];
   dataSource = ELEMENT_DATA;
+  /* private subscriptionCar: Subscription = new Subscription();
+  public carsettings: any; */
+  constructor(
+   // private apiServiceCar: ApiServiceCarFleet,
+    //private sharedServiceCar: SharedServiceCar,
+  ) {}
+   ngOnInit(): void {
+    /* this.subscriptionCar.add(
+      interval(1000).subscribe(() => {
+        this.apiServiceCar.getData().subscribe({
+          next: (response) => {
+            console.log('API Response:', response);
+            this.carsettings = response;
+            this.sharedServiceCar.setCarsharefunction(this.carsettings);
+          },
+          error: (err) => {
+            console.error('Error fetching data:', err);
+          },
+        });
+      })
+    ); */
+  }
 
-  constructor() {}
+  ngOnDestroy(): void {
+   /*  if (this.subscriptionCar) {
+      this.subscriptionCar.unsubscribe();
+    } */
+  } 
+ 
 }
+ 
