@@ -9,6 +9,7 @@ from api.models.scenario import Scenario
 import time
 from api.api import API
 from basic import basic_initial_assignement, basic_loop
+from randomAlg import random_initial_assignement, random_loop
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
@@ -57,6 +58,8 @@ class Assigner:
         match self.algorithm:
             case "basic":
                 return self.basic
+            case "random":
+                return self.random
     
     def unpack_scenario(self, new_scenario):
         self.scenario = new_scenario
@@ -77,6 +80,18 @@ class Assigner:
             print(f"    {len(self.unserved_customers)} unserved customers")
             print(f"    {len(self.served_customers)} served customers")
         basic_loop(self, synchronizer, data_lock)
+    
+    def random(self, synchronizer, data_lock):
+        print("Init random")
+        if self.debug:
+            print("Initial assignement:")
+        _, self.free_vehicles, self.buys_vehicles, self.unserved_customers, self.served_customers = random_initial_assignement(self.scenario, self.vehicles, self.customers, self.api)
+        if self.debug:
+            print(f"    {len(self.free_vehicles)} free vehicles")
+            print(f"    {len(self.buys_vehicles)} busy vehicles")
+            print(f"    {len(self.unserved_customers)} unserved customers")
+            print(f"    {len(self.served_customers)} served customers")
+        random_loop(self, synchronizer, data_lock)
         
 
 if __name__ == "__main__":
