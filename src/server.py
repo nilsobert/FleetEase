@@ -1,16 +1,32 @@
 import json
 import time
 from flask import Flask, jsonify, request
-from systemStatistics import System
+from src.systemStatistics import getApplicationStatistics
 from fleetStatistics import getFleetStatistics, getFleetData
-#from .api.models.scenario import Scenario
-#from .api.models.usage import Usage
+from synchronizer import Synchronizer
+import threading
 
-current_scenario = None
-usage = None
+
+app = Flask(__name__)
+
+# Shared data and lock
+synchronizer = Synchronizer()
+data_lock = threading.Lock()
+
+# Flask route to update shared data
+@app.route('/send_message', methods=['POST'])
+def send_message():
+    global synchronizer
+    data = request.json
+    message = data.get("message")
+    
+    if not message:
+        return jsonify({"error": "Message is required"}), 400
+    
+    
+    return jsonify({"status": "Message received"}), 200
 
 def create_app():
-    app = Flask(__name__)
 
     vehicles = [1, 2, 3, 4, 5]
     customers = ["Alan", "Tod", "Jane"]
