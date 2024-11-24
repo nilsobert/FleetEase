@@ -52,3 +52,13 @@ class Vehicle:
             vehicleSpeed=data["vehicleSpeed"],
             routePlan = RoutePlan(trips=[], initial_Coords=Coordinate(data["coordX"], data["coordY"]))
         )
+
+    def to_json(self):
+        return {
+            "activeTime": self.activeTime,
+            "distanceTravelled": self.distanceTravelled,
+            "isAvailable": self.isAvailable,
+            "remainingTravelTime": self.remainingTravelTime,
+            "vehicleSpeed": self.vehicleSpeed,
+            "numberOfTrips": self.numberOfTrips
+        }

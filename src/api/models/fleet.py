@@ -11,10 +11,12 @@ import fleetStatistics
 
 @dataclass
 class Fleet:
-    consumption_per_100_km: float
-    velocity_in_km_per_hour: float
-    total_time_traveled: int
-    total_distance_finished_rides: float
+    total_active_time: float
+    energy_consumed_total: float
+    total_distance_travelled: float
+    vehicles_states: list[dict]
+    num_waiting: int
+    num_arrived: int
     _scenario: Optional[Scenario] = field(default=None, init=False)  # Private field for property storage
 
     @property
@@ -23,7 +25,9 @@ class Fleet:
 
     @scenario.setter
     def scenario(self, value: Optional[Scenario]):
-        (self.consumption_per_100_km, self.total_time_traveled, self.total_time_traveled, self.total_distance_finished_rides) = fleetStatistics.trigger_calculation(value)
+        self.total_active_time, self.total_distance_travelled, self.vehicles_states, self.num_served, self.num_waiting = fleetStatistics.trigger_calculation(value)
+        kwhpkm = 18.5
+        self.energy_consumed_total = kwhpkm*self.total_distance_travelled
         self._scenario = value
 
     def to_json(self) -> str:

@@ -10,13 +10,30 @@ example_coordinate_array = [Coordinate(1, 2), Coordinate(2, 4), Coordinate(4, 6)
 
 
 def trigger_calculation(scenario):
-    get_total_distance_finished_rides = get_total_distance_finished_rides()
-    get_total_distance_travelled = get_total_distance_travelled()
-    consumption_in_kwh_per_100_km = 
+    vehicles = scenario.vehicles
+    customers = scenario.customers
+    total_distance_travelled = get_total_distance_travelled(vehicles)
+    vehicle_states = get_vehicle_states(vehicles)
+    total_active_time = get_total_active_time(vehicles)
+    num_served = get_num_served(customers)
+    num_waiting = get_num_waiting(customers)
+    return total_active_time, total_distance_travelled, vehicle_states, num_served, num_waiting
+
+def get_num_served(customers):
+    return len([a for a in customers if not a.awaitingService])
+
+def get_num_waiting(customers):
+    return len([a for a in customers if a.awaitingService])
+
+def get_vehicle_states(vehicles):
+    return [v.to_json() for v in vehicles]
+
+def get_total_active_time(vehicles):
+    return sum([v.activeTime for v in vehicles])
 
 # in kilometer: number($float)
-def get_total_distance_travelled():
-    return 40
+def get_total_distance_travelled(vehicles):
+    return sum([v.distanceTravelled for v in vehicles])
 
 # in minutes
 def get_time_passed():

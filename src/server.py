@@ -9,35 +9,42 @@ import threading
 app = Flask(__name__)
 
 # Shared data and lock
+global synchronizer
 synchronizer = Synchronizer()
 data_lock = threading.Lock()
 
-def create_app():
+
+@app.route('/car_state', methods=['GET'])
+def get_car_state():
     global synchronizer
-    fleet = synchronizer.fleet
-    scenario = synchronizer.fleet.scenario()
-    vehicles = scenario.vehicles
-    customers = scenario.customers
-    system = synchronizer.system
+    return jsonify(synchronizer.fleet.vehicles_states)
 
-    @app.route('/vehicles', methods=['GET'])
-    def get_vehicles():
-        return jsonify(vehicles)
+@app.route('/service', methods=['GET'])
+def get_arrivals():
+    global synchronizer
+    num_waiting = synchronizer.fleet.num_waiting
+    num_served = synchronizer.fleet.num_arrived
+    out = {
+        "num_waiting": num_waiting,
+        "num_served": num_served
+    }
+    return jsonify(out)
 
-    @app.route('/customers', methods=['GET'])
-    def get_customers():
-        return jsonify(customers)
+@app.route('/consumption', methods=['GET'])
+def get_consumption():
+    global synchronizer
+    total_active_time = synchronizer.fleet.total_active_time
+    energy_consumed_total = synchronizer.fleet.energy_consumed_total
+    total_distance_travelled = synchronizer.fleet.total_distance_travelled
+    out = {
+        "total_active_time":total_active_time,
+        "energy_consumed_total":energy_consumed_total,
+        "total_distance_travelled":total_distance_travelled
+    }
+    return jsonify(out)
 
-    @app.route('/fleetStatistics', methods=['GET'])
-    def get_fleet_statistics():
-        return fleet.to_json()
+@app.route('/system', methods=['GET'])
+def get_system():
+    global synchronizer
+    return jsonify(synchronizer.system)
 
-    @app.route('/applicationStatistics', methods=['GET'])
-    def get_application_statistics():
-        return system.to_json()
-
-    @app.route('/fleetData', methods=['GET'])
-    def get_scenario_data():
-        return scenario.to_json()
-
-    return app
