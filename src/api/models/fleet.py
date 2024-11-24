@@ -1,13 +1,13 @@
-from dataclasses import dataclass, field
-from typing import List
+import json
+from dataclasses import dataclass, field, asdict
+from typing import List, Optional
 from uuid import UUID
 from .vehicle import Vehicle
 from .customer import Customer
 from .routePlan import RoutePlan
 from .coordinate import Coordinate
 from .scenario import Scenario
-
-from typing import Optional
+import fleetStatistics
 
 @dataclass
 class Fleet:
@@ -19,11 +19,15 @@ class Fleet:
 
     @property
     def scenario(self) -> Optional[Scenario]:
-        """Getter for the scenario."""
         return self._scenario
 
     @scenario.setter
     def scenario(self, value: Optional[Scenario]):
-        """Setter for the scenario with custom logic (if needed)."""
-        #print("setting fleet")
+        (self.consumption_per_100_km, self.total_time_traveled, self.total_time_traveled, self.total_distance_finished_rides) = fleetStatistics.trigger_calculation(value)
         self._scenario = value
+
+    def to_json(self) -> str:
+        fleet_dict = asdict(self)
+        if self._scenario:
+            fleet_dict['_scenario'] = self._scenario.to_json()
+        return json.dumps(fleet_dict, indent=4)
