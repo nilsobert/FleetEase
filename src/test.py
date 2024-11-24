@@ -25,9 +25,10 @@ def init_api():
 def test_run():
     scenario, vehicles, customers, api = init_api()
     algorithm = "basic"
-
+    st = time.time()
     assigner = Assigner(scenario=scenario, vehicles=vehicles, customers=customers, api=api, algorithm=algorithm, debug=False)
     assigner.assign(synchronizer, data_lock)
+    print(time.time(-st)
 
 if __name__ == "__main__":
    

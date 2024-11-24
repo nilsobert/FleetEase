@@ -38,7 +38,7 @@ def random_procedual_assignement(scenario, vehicles, customers, api):
 
 
 def random_loop(self, synchronizer, data_lock):
-    while self.unserved_customers:
+    while self.unserved_customers or self.busy_vehicles:
         time.sleep(2)
         #print(".")
         updated_scenario = asyncio.run(self.api.get_runner_scenario(self.scenario))

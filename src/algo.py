@@ -9,6 +9,7 @@ from api.models.scenario import Scenario
 import time
 from api.api import API
 from basic import basic_initial_assignement, basic_loop
+from randomAlg import random_initial_assignement, random_loop
 
 def zero_pad(matrix):
     m = matrix.reshape((matrix.shape[0], -1))
