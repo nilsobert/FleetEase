@@ -25,5 +25,5 @@ class Fleet:
     @scenario.setter
     def scenario(self, value: Optional[Scenario]):
         """Setter for the scenario with custom logic (if needed)."""
-        print("setting fleet")
+        #print("setting fleet")
         self._scenario = value

@@ -1,7 +1,7 @@
 import json
 import time
 from flask import Flask, jsonify, request
-from src.systemStatistics import getApplicationStatistics
+#from api.src.systemStatistics import getApplicationStatistics
 from fleetStatistics import getFleetStatistics, getFleetData
 from synchronizer import Synchronizer
 import threading

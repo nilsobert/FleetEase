@@ -15,17 +15,18 @@ class System:
         self._time = list(np.array(list(range(self.number_of_points))[::-1])*-0.5)
         self.time = []
     
-    def measure(self):
+    def measure(self, synchronizer, lock):
         while not self.stop:
             self.cpu.append(self.process.cpu_percent(interval=0.3))
             self.ram.append(round(self.process.memory_percent(),3))
             self.cpu = self.cpu[-min(len(self.cpu), self.number_of_points):]
             self.ram = self.ram[-min(len(self.ram), self.number_of_points):]
             self.time = self._time[-min(len(self.ram), self.number_of_points):]
+            with lock:
+                synchronizer.system=self.to_json()
             sleep(self.interval)
-            
     
-    def json(self):
+    def to_json(self):
         return {
             "cpu":self.cpu,
             "ram": self.ram,
